@@ -21,9 +21,13 @@ Durasi pengerjaan tugas ini adalah 4 minggu terhitung dari sekarang (20 Juni 201
 
 ### Petunjuk Pengerjaan
 Berikut petunjuk pengerjaan:
+
 1. Lakukan fork dari repository github berikut: [Link Repo](https://github.com/irkwan/Tugas3-CaIRK2016)
+
 2. Lakukan commit secukupnya dengan ***pesan yg bermakna***, contoh: validasi kata pada kamus, GUI done. Jangan seperti final, benerin dikit, dsb. Disarankan untuk tidak melakukan commit dengan perubahan yg terlalu besar, contoh: hanya melakukan satu commit kemudian dikumpulkan
+
 3. Jika sudah selesai, lakukan pull request ke repository github diatas dengan format ***NIM_Nama lengkap*** sebelum deadline yg ditentukan
+
 4. Sertakan ***executable file (GUI)*** pada repository saat pengumpulan
 
 Seperti biasa, untuk segala macam pertanyaan, silahkan tanyakan melalui comment pada post ini. silahkan mulai dipikirkan teknis pengerjaannya. Tetap semangat!!
