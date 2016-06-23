@@ -13,6 +13,7 @@ public class Dictionary {
 	data = _data;
     }
     
+    
     /**
      * Add the input string to Dictionary (will be arranged lexicographically)
      * @param word input string
@@ -21,11 +22,14 @@ public class Dictionary {
 	data.add(word);
     }
     
-    /**
-     * @return The first word in dictionary
-     */
     public String getFirstWord() {
 	return data.first();
+    }
+    public void resetDict() {
+	data.clear();
+    }
+    public int getSize() {
+	return data.size();
     }
     
     /**
@@ -44,9 +48,14 @@ public class Dictionary {
 	
     }
     
+    
     public boolean isEmpty() {
 	return data.isEmpty();
     }
+    public boolean isExist(String word) {
+	return data.contains(word);
+    }
+    
     
     @Override
     public String toString() {

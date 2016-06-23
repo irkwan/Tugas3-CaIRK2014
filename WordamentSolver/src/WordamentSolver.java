@@ -1,8 +1,12 @@
 
+
+
 public class WordamentSolver {
 
     public static void main(final String[] args) {
 
+
+	
     }
 }
 
@@ -38,11 +42,6 @@ System.out.println(temp);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-WordamentMatrix W = new WordamentMatrix();
-W.setChar(new Point(1,0), 'B');
-W.setChar(new Point(1,1), 'C');
-W.setChar(new Point(0,1), 'D');
-
 Vector<Point> P = new Vector<>();
 P.add(new Point(0,0));
 
@@ -52,9 +51,13 @@ D.addWord("ACA");
 D.addWord("ADA");
 D.addWord("ADD");
 D.addWord("ABC");
-D.addWord("ABF");
+D.addWord("AB");
 
-GameStatus G = new GameStatus(W,D,P);
+GameStatus G = new GameStatus(D,P);
+G.setBoard(new Point(1,0), 'B');
+G.setBoard(new Point(1,1), 'C');
+G.setBoard(new Point(0,1), 'D');
+
 System.out.print(G);
 
 Vector<GameStatus> ListG = G.generateChild();
@@ -67,4 +70,26 @@ for(GameStatus TempG : ListG) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+
+Dictionary D = new Dictionary();
+D.addWord("ABA");
+D.addWord("ACA");
+D.addWord("ADA");
+D.addWord("ADD");
+D.addWord("ABC");
+D.addWord("AB");
+
+WordamentMatrix G = new WordamentMatrix();
+G.setChar(new Point(1,0), 'B');
+G.setChar(new Point(1,1), 'C');
+G.setChar(new Point(0,1), 'D');
+
+GameTree res = new GameTree(G,D);
+Vector<GameStatus> temp = res.Process();
+
+System.out.print(G);
+System.out.print(temp);
+
+///////////////////////////////////////////////////////////////////////////////
+
 */
