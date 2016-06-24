@@ -17,7 +17,7 @@ Adapun spek Wordament Solver yang perlu dibuat adalah:
 - Performa dari aplikasi diukur dari banyaknya poin yang didapatkan dalam satu kali game
 
 ### Deadline Pengumpulan
-Durasi pengerjaan tugas ini adalah 4 minggu terhitung dari sekarang (20 Juni 2016, pk. 21.00). Sehingga deadlinenya adalah **18 Juli 2016, pk. 21.00**.
+Durasi pengerjaan tugas ini adalah 4 minggu terhitung dari sekarang (20 Juni 2016, pk. 21.00). Sehingga deadlinenya ~~adalah **18 Juli 2016, pk. 21.00**~~ **diundur menjadi 30 Juli 2016, pk. 21.00**.
 
 ### Petunjuk Pengerjaan
 Berikut petunjuk pengerjaan:
