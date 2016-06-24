@@ -33,21 +33,12 @@ public class GameTree {
     private final GameStatusComparator MyComp = new GameStatusComparator();
     private final PriorityQueue<GameStatus> Repository = new PriorityQueue<>(1,MyComp);
 
-    /** Game board */
-    private final WordamentMatrix Board;
-    /** List of words that is already made */
-    private final Dictionary Claimed;
-    /** List of Final-state GameStatus that is already made */
     private final Vector<GameStatus> ClaimedDetail;
-    /** List of possible words) */
-    private final Dictionary MasterDict;
     
     public GameTree(WordamentMatrix M, Dictionary W) {
 	
-	Board = M;
-	Claimed = new Dictionary();
+	Dictionary Claimed = new Dictionary();
 	ClaimedDetail = new Vector<>();
-	MasterDict = W; 
 	
 	for(int i=0; i<4; i++) {
 	    for(int j=0; j<4; j++) {
@@ -56,9 +47,9 @@ public class GameTree {
 		
 		Vector<Point> Way = new Vector<>();
 		Way.add(pos);
-		Dictionary SubDict = MasterDict.getSubDictPrefix(Character.toString(M.getChar(pos)));
+		Dictionary SubDict = W.getSubDictPrefix(Character.toString(M.getChar(pos)));
 
-		if(!SubDict.isEmpty()) Repository.add(new GameStatus(Board, Claimed, ClaimedDetail, Way, SubDict));
+		if(!SubDict.isEmpty()) Repository.add(new GameStatus(M, Claimed, ClaimedDetail, Way, SubDict));
 		
 	    }
 	}

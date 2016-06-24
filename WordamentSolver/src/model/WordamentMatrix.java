@@ -16,7 +16,7 @@ public class WordamentMatrix {
 	return data[P.y][P.x];
     }
     public void setChar(Point P, char c) {
-	data[P.y][P.x] = c;
+	data[P.y][P.x] = Character.toUpperCase(c);
     }
     
     @Override

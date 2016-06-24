@@ -82,13 +82,9 @@ public class GameStatus {
 	res.append(CurrPath.toString());
 	res.append("\n");
 	
-	res.append("Possibility : ");
-	res.append(Possibility.toString());
+	res.append("Word : ");
+	res.append(getWord());
 	res.append("\n");
-	
-	res.append("Claimed : ");
-	res.append(Claimed.toString());
-	res.append("\n\n");
 	
 	return res.toString();
     }

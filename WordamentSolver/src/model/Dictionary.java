@@ -1,5 +1,7 @@
 package model;
 
+import java.io.File;
+import java.util.Scanner;
 import java.util.TreeSet;
 
 public class Dictionary {
@@ -48,6 +50,30 @@ public class Dictionary {
 	
     }
     
+    /**
+     * Read the file inputed and add all the string separated by newline and 
+     * space to the dictionary. If ANYTHING went wrong, reset the dictionary
+     *  and return false.
+     */
+    public boolean scanWordFile(String path) {
+        
+        Scanner sc;
+        try {
+            sc = new Scanner(new File(path));
+            
+            while (sc.hasNextLine()) {
+
+                String line = sc.nextLine().trim();
+	        if(!isExist(line)) addWord(line.toUpperCase());
+		
+            }
+            return true;
+	    
+        } catch(Throwable e) {
+	    resetDict();
+            return false;
+        }
+    }
     
     public boolean isEmpty() {
 	return data.isEmpty();
