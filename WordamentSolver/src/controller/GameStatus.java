@@ -1,6 +1,9 @@
-package model;
+package controller;
 
 import java.util.Vector;
+import model.Dictionary;
+import model.Point;
+import model.WordamentMatrix;
 
 public class GameStatus {
     

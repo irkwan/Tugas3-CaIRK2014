@@ -56,7 +56,7 @@ public class Dictionary {
      *  and return false.
      */
     public boolean scanWordFile(String path) {
-        
+
         Scanner sc;
         try {
             sc = new Scanner(new File(path));
