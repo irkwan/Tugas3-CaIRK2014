@@ -28,9 +28,7 @@ public class GameStatus {
 	Possibility = P;
     }
     
-    /**
-     * Return the word formed by currpath in board
-     */
+    
     public String getWord() {
 	
 	StringBuilder res = new StringBuilder();
@@ -39,6 +37,9 @@ public class GameStatus {
 	}
 	return res.toString();
 	
+    }
+    public Vector<Point> getPath() {
+	return CurrPath;
     }
     public int getCost() {
 	return Possibility.getSize();

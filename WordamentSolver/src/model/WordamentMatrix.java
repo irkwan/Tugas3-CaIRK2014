@@ -8,8 +8,9 @@ public class WordamentMatrix {
     
     public WordamentMatrix() {
 	for(int i=0; i<4; i++) 
-	    for(int j=0; j<4; j++) 
-		data[i][j] = 'A';
+	    for(int j=0; j<4; j++) {
+		data[i][j] = 'X';
+	    }
     }
     
     public char getChar(Point P) {

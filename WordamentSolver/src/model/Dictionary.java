@@ -64,7 +64,7 @@ public class Dictionary {
             while (sc.hasNextLine()) {
 
                 String line = sc.nextLine().trim();
-	        if(!isExist(line)) addWord(line.toUpperCase());
+	        if(!isExist(line) && !line.isEmpty()) addWord(line.toUpperCase());
 		
             }
             return true;

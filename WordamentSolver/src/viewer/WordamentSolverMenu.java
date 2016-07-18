@@ -7,6 +7,8 @@ package viewer;
 
 import java.awt.event.WindowEvent;
 import java.util.Vector;
+import java.util.Random;
+import javax.swing.SwingUtilities;
 import javax.swing.JOptionPane;
 import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
@@ -14,17 +16,18 @@ import javax.swing.JScrollPane;
 import model.Dictionary;
 import model.Point;
 import model.WordamentMatrix;
-
 import controller.GameStatus;
 import controller.GameTree;
 
 
 public class WordamentSolverMenu extends javax.swing.JFrame {
     
-    
     private final WordamentMatrix Board = new WordamentMatrix();
     private final Dictionary WordList = new Dictionary();
     private Vector<GameStatus> Result;
+    
+    private int lastSel = -1;
+    
     
     /**
      * Creates new form WordamentSolverMenu
@@ -35,7 +38,9 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
 	initComponents();
 	
 	if(!fine) {
-	    JOptionPane.showMessageDialog(this, "PLACEHOLDER_INVALID_DICT", "Invalid Dictionary Configuration", JOptionPane.ERROR_MESSAGE);
+	    JOptionPane.showMessageDialog(this, "Please ensure there is a txt file called 'dictionary.txt' in the program directory.\n "
+		    + "Inside please, make a list of valid words where each line of text is a word \n"
+		    + "separated by a new line ", "Invalid Dictionary Configuration", JOptionPane.ERROR_MESSAGE);
 	    dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 	} else {
 	    ShowjResultPanel(false);
@@ -62,6 +67,16 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        jResultPanel = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jWordList = new javax.swing.JList<>();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jWordScoreList = new javax.swing.JList<>();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jWordDetailField = new javax.swing.JTextArea();
+        jPanel1 = new javax.swing.JPanel();
+        jSolveButton = new javax.swing.JButton();
+        jProgressBar1 = new javax.swing.JProgressBar();
         jBoardPanel = new javax.swing.JPanel();
         jTile1 = new javax.swing.JTextField();
         jTile2 = new javax.swing.JTextField();
@@ -79,25 +94,13 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
         jTile15 = new javax.swing.JTextField();
         jTile14 = new javax.swing.JTextField();
         jTile13 = new javax.swing.JTextField();
-        jBoardLabel = new java.awt.Label();
-        jSolveButton = new javax.swing.JButton();
-        jResultPanel = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jWordList = new javax.swing.JList<>();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jWordScoreList = new javax.swing.JList<>();
-        jTotalWordField = new javax.swing.JTextField();
-        jTotalScoreField = new javax.swing.JTextField();
-        jProgressBar1 = new javax.swing.JProgressBar();
+        jTextField1 = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jRandomizeBoardMenuItem = new javax.swing.JMenuItem();
         jResetBoardMenuItem = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jEditDictionaryMenuItem6 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jWordamentHelpMenuItem3 = new javax.swing.JMenuItem();
-        jHowToHelpMenuItem4 = new javax.swing.JMenuItem();
+        jEditDictionaryMenuItemHelp = new javax.swing.JMenuItem();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -159,151 +162,217 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
+        jResultPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jWordList.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jWordList.setModel(new DefaultListModel());
+        jWordList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jWordListValueChanged(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jWordList);
+
+        jScrollPane5.getVerticalScrollBar().setModel(jScrollPane2.getVerticalScrollBar().getModel());
+        jScrollPane5.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+        jWordScoreList.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jWordScoreList.setModel(new DefaultListModel());
+        jScrollPane5.setViewportView(jWordScoreList);
+
+        jWordDetailField.setEditable(false);
+        jWordDetailField.setColumns(20);
+        jWordDetailField.setRows(1);
+        jWordDetailField.setToolTipText("");
+        jScrollPane6.setViewportView(jWordDetailField);
+
+        javax.swing.GroupLayout jResultPanelLayout = new javax.swing.GroupLayout(jResultPanel);
+        jResultPanel.setLayout(jResultPanelLayout);
+        jResultPanelLayout.setHorizontalGroup(
+            jResultPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jResultPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jResultPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane6)
+                    .addGroup(jResultPanelLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jResultPanelLayout.setVerticalGroup(
+            jResultPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jResultPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jResultPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jSolveButton.setText("Solve");
+        jSolveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jSolveButtonActionPerformed(evt);
+            }
+        });
+
+        jProgressBar1.setMaximum(120);
+
         jBoardPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jTile1.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile1.setText("X");
+        jTile1.setText("A");
         jTile1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile2.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile2.setText("X");
+        jTile2.setText("N");
         jTile2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile3.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile3.setText("X");
+        jTile3.setText("S");
         jTile3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile3.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile7.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile7.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile7.setText("X");
+        jTile7.setText("I");
         jTile7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile7.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile6.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile6.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile6.setText("X");
+        jTile6.setText("E");
         jTile6.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile6.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile5.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile5.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile5.setText("X");
+        jTile5.setText("P");
         jTile5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile5.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile9.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile9.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile9.setText("X");
+        jTile9.setText("P");
         jTile9.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile9.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile10.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile10.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile10.setText("X");
+        jTile10.setText("H");
         jTile10.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile10.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile11.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile11.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile11.setText("X");
+        jTile11.setText("V");
         jTile11.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile11.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile4.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile4.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile4.setText("X");
+        jTile4.setText("S");
         jTile4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile4.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile8.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile8.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile8.setText("X");
+        jTile8.setText("S");
         jTile8.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile8.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile12.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile12.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile12.setText("X");
+        jTile12.setText("E");
         jTile12.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile12.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile16.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile16.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile16.setText("X");
+        jTile16.setText("N");
         jTile16.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile16.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile15.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile15.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile15.setText("X");
+        jTile15.setText("E");
         jTile15.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile15.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile14.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile14.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile14.setText("X");
+        jTile14.setText("E");
         jTile14.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile14.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jTile13.setFont(new java.awt.Font("Trebuchet MS", 1, 11)); // NOI18N
         jTile13.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTile13.setText("X");
+        jTile13.setText("R");
         jTile13.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTile13.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
-        jBoardLabel.setAlignment(java.awt.Label.CENTER);
-        jBoardLabel.setText("Wordament Board");
+        jTextField1.setEditable(false);
+        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextField1.setText("Wordament Board");
+        jTextField1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        jTextField1.setEnabled(false);
 
         javax.swing.GroupLayout jBoardPanelLayout = new javax.swing.GroupLayout(jBoardPanel);
         jBoardPanel.setLayout(jBoardPanelLayout);
         jBoardPanelLayout.setHorizontalGroup(
             jBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBoardPanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jBoardPanelLayout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTile1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTile5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTile9, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTile2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTile6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTile10, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTile3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTile7, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTile11, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTile4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTile8, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTile12, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jBoardPanelLayout.createSequentialGroup()
+                                .addComponent(jTile13, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTile14, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTile15, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTile16, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jBoardPanelLayout.createSequentialGroup()
+                                .addGroup(jBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTile1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTile5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTile9, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTile2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTile6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTile10, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTile3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTile7, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTile11, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTile4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTile8, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTile12, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jBoardPanelLayout.createSequentialGroup()
-                        .addComponent(jTile13, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTile14, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTile15, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTile16, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jBoardLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(56, 56, 56)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jBoardPanelLayout.setVerticalGroup(
             jBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jBoardPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jBoardLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(9, 9, 9)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jBoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jBoardPanelLayout.createSequentialGroup()
                         .addComponent(jTile4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -340,87 +409,61 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jBoardLabel.getAccessibleContext().setAccessibleDescription("");
-
-        jSolveButton.setText("Solve");
-        jSolveButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jSolveButtonActionPerformed(evt);
-            }
-        });
-
-        jResultPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jWordList.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        jWordList.setModel(new DefaultListModel());
-        jScrollPane2.setViewportView(jWordList);
-
-        jScrollPane5.getVerticalScrollBar().setModel(jScrollPane2.getVerticalScrollBar().getModel());
-        jScrollPane5.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-
-        jWordScoreList.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        jWordScoreList.setModel(new DefaultListModel());
-        jScrollPane5.setViewportView(jWordScoreList);
-
-        jTotalWordField.setEditable(false);
-
-        jTotalScoreField.setEditable(false);
-
-        javax.swing.GroupLayout jResultPanelLayout = new javax.swing.GroupLayout(jResultPanel);
-        jResultPanel.setLayout(jResultPanelLayout);
-        jResultPanelLayout.setHorizontalGroup(
-            jResultPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jResultPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jResultPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jTotalWordField, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jResultPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jTotalScoreField, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSolveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addComponent(jBoardPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jResultPanelLayout.setVerticalGroup(
-            jResultPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jResultPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jResultPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane5))
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(jBoardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jSolveButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jResultPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTotalWordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTotalScoreField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Board");
 
         jRandomizeBoardMenuItem.setText("Randomize Board");
+        jRandomizeBoardMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRandomizeBoardMenuItemActionPerformed(evt);
+            }
+        });
         jMenu1.add(jRandomizeBoardMenuItem);
 
         jResetBoardMenuItem.setText("Reset Board");
+        jResetBoardMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jResetBoardMenuItemActionPerformed(evt);
+            }
+        });
         jMenu1.add(jResetBoardMenuItem);
 
         jMenuBar1.add(jMenu1);
 
         jMenu3.setText("Dictionary");
 
-        jEditDictionaryMenuItem6.setText("Edit Dictionary");
-        jMenu3.add(jEditDictionaryMenuItem6);
+        jEditDictionaryMenuItemHelp.setText("Help");
+        jEditDictionaryMenuItemHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jEditDictionaryMenuItemHelpActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jEditDictionaryMenuItemHelp);
 
         jMenuBar1.add(jMenu3);
-
-        jMenu2.setText("Help");
-
-        jWordamentHelpMenuItem3.setText("Wordament ?");
-        jMenu2.add(jWordamentHelpMenuItem3);
-
-        jHowToHelpMenuItem4.setText("How to Use");
-        jMenu2.add(jHowToHelpMenuItem4);
-
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -430,34 +473,85 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jSolveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBoardPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jResultPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jResultPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jBoardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jSolveButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jResultPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jResultPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    
+    /**
+     * Return the content of tile with P coor, return NULL char if the format 
+     * is wrong
+     */
+    private char getUIChar(Point P) {
+	
+	String s = null;
+	if(P.y==3) {
+	    if(P.x==0) s = jTile1.getText(); else
+	    if(P.x==1) s = jTile2.getText(); else
+	    if(P.x==2) s = jTile3.getText(); else
+	    if(P.x==3) s = jTile4.getText();
+	} else if(P.y==2) {
+	    if(P.x==0) s = jTile5.getText(); else
+	    if(P.x==1) s = jTile6.getText(); else
+	    if(P.x==2) s = jTile7.getText(); else
+	    if(P.x==3) s = jTile8.getText();
+	} else if(P.y==1) {
+	    if(P.x==0) s = jTile9.getText(); else
+	    if(P.x==1) s = jTile10.getText(); else
+	    if(P.x==2) s = jTile11.getText(); else
+	    if(P.x==3) s = jTile12.getText();
+	} else if(P.y==0) {
+	    if(P.x==0) s = jTile13.getText(); else
+	    if(P.x==1) s = jTile14.getText(); else
+	    if(P.x==2) s = jTile15.getText(); else
+	    if(P.x==3) s = jTile16.getText();
+	}
+	
+	if(s==null) return '\0';
+	else {
+	    s.trim();
+	    if(s.length()>1) return '\0';
+	    else return s.charAt(0);
+	}
+    }
+    private void setUIChar(Point P, char c) {
+	String s = Character.toString(c);
+	if(P.y==3) {
+	    if(P.x==0) jTile1.setText(s); else
+	    if(P.x==1) jTile2.setText(s); else
+	    if(P.x==2) jTile3.setText(s); else
+	    if(P.x==3) jTile4.setText(s);
+	} else if(P.y==2) {
+	    if(P.x==0) jTile5.setText(s); else
+	    if(P.x==1) jTile6.setText(s); else
+	    if(P.x==2) jTile7.setText(s); else
+	    if(P.x==3) jTile8.setText(s); 
+	} else if(P.y==1) {
+	    if(P.x==0) jTile9.setText(s); else
+	    if(P.x==1) jTile10.setText(s); else
+	    if(P.x==2) jTile11.setText(s); else
+	    if(P.x==3) jTile12.setText(s);
+	} else if(P.y==0) {
+	    if(P.x==0) jTile13.setText(s); else
+	    if(P.x==1) jTile14.setText(s); else
+	    if(P.x==2) jTile15.setText(s); else
+	    if(P.x==3) jTile16.setText(s);
+	}
+    }
     
     /**
      * Enable/Disable the wordament matrix to user edit
@@ -493,64 +587,17 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
      * Update the Board according to the textfields, return false iff something
      * unfortunate happened
      */
-    private boolean tryUpdateBoard() {
+    private boolean tryImportBoard() {
 	
-	String a = jTile13.getText().trim();
-	String b = jTile14.getText().trim();
-	String c = jTile15.getText().trim();
-	String d = jTile16.getText().trim();
+	ShowjResultPanel(false);
+	ControljBoardPanel(false);
 	
-	String e = jTile9.getText().trim();
-	String f = jTile10.getText().trim();
-	String g = jTile11.getText().trim();
-	String h = jTile12.getText().trim();
-	
-	String i = jTile5.getText().trim();
-	String j = jTile6.getText().trim();
-	String k = jTile7.getText().trim();
-	String l = jTile8.getText().trim();	
-	
-	String m = jTile1.getText().trim();
-	String n = jTile2.getText().trim();
-	String o = jTile3.getText().trim();
-	String p = jTile4.getText().trim();
-	
-	if (a.length()>1) return false;
-	if (b.length()>1) return false;
-	if (c.length()>1) return false;
-	if (d.length()>1) return false;
-	if (e.length()>1) return false;
-	if (f.length()>1) return false;
-	if (g.length()>1) return false;
-	if (h.length()>1) return false;
-	if (i.length()>1) return false;
-	if (j.length()>1) return false;
-	if (k.length()>1) return false;
-	if (l.length()>1) return false;
-	if (m.length()>1) return false;
-	if (n.length()>1) return false;
-	if (o.length()>1) return false;
-	if (p.length()>1) return false;
-	
-	Board.setChar(new Point(0,0), a.charAt(0));
-	Board.setChar(new Point(1,0), b.charAt(0));
-	Board.setChar(new Point(2,0), c.charAt(0));
-	Board.setChar(new Point(3,0), d.charAt(0));
-	Board.setChar(new Point(0,1), e.charAt(0));
-	Board.setChar(new Point(1,1), f.charAt(0));
-	Board.setChar(new Point(2,1), g.charAt(0));
-	Board.setChar(new Point(3,1), h.charAt(0));
-	Board.setChar(new Point(0,2), i.charAt(0));
-	Board.setChar(new Point(1,2), j.charAt(0));
-	Board.setChar(new Point(2,2), k.charAt(0));
-	Board.setChar(new Point(3,2), l.charAt(0));
-	Board.setChar(new Point(0,3), m.charAt(0));
-	Board.setChar(new Point(1,3), n.charAt(0));
-	Board.setChar(new Point(2,3), o.charAt(0));
-	Board.setChar(new Point(3,3), p.charAt(0));
-	
-	System.out.println(Board);
-	
+	for(int i=0; i<4; i++) 
+	    for(int j=0; j<4; j++) {
+		char c = getUIChar(new Point(i,j));
+		if(c == '\0') return false;
+		else Board.setChar(new Point(i,j), c);
+	    }
 	return true;
     }
     
@@ -559,40 +606,128 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
      */
     private void updateResultBoard() {
 	
-	DefaultListModel WordList = (DefaultListModel) jWordList.getModel();
+	DefaultListModel WordList2 = (DefaultListModel) jWordList.getModel();
 	DefaultListModel ScoreList = (DefaultListModel) jWordScoreList.getModel();
 	
-	WordList.removeAllElements();
+	WordList2.removeAllElements();
 	ScoreList.removeAllElements();
 	
+	int TotScore = 0;
 	for(GameStatus temp : Result) {
 	    String temp2 = temp.getWord();
-	    WordList.addElement(temp2);
+	    WordList2.addElement(temp2);
 	    ScoreList.addElement(Integer.toString(temp2.length()));
+	    TotScore+=temp2.length();
 	}
 	
+	WordList2.addElement(" ");
+	ScoreList.addElement(" ");
+	WordList2.addElement("Total "+ Result.size() +" words");
+	ScoreList.addElement("Total: "+ TotScore );
+    }
+    
+    
+    private class ProgressBarTask extends Thread {    
+	
+	boolean[] Stop;
+	
+	public ProgressBarTask(boolean[] _Stop){
+	    Stop = _Stop;
+	}
+
+	@Override
+	public void run() {
+	    jProgressBar1.setStringPainted(true);
+	    jProgressBar1.setValue(jProgressBar1.getMinimum());
+	    
+	    for(int i =0; i<= 120; i+=1){
+		final int progress = i;
+		SwingUtilities.invokeLater(() -> {
+		    jProgressBar1.setValue(progress);
+		    jProgressBar1.setString((120-progress) + " seconds left");
+		});
+		
+		try {
+		    int k = 0;
+		    while(k<9 && !Stop[0]) {
+			Thread.sleep(100);
+			k++;
+		    }
+		    if(Stop[0]) break;
+		} catch (InterruptedException e) {}
+	    }
+	    
+	    SwingUtilities.invokeLater(() -> {
+		jProgressBar1.setValue(jProgressBar1.getMaximum());
+		jProgressBar1.setString("DONE");
+	    });
+	    Stop[0] = true;
+	}
     }
     
     
     private void jSolveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSolveButtonActionPerformed
 
-	boolean fine = tryUpdateBoard();
-	if(!fine) JOptionPane.showMessageDialog(this, "Each board tile must contain exactly one Character", "Invalid Board Configuration", JOptionPane.WARNING_MESSAGE);
+	boolean fine = tryImportBoard();
+	if(!fine) 
+	    JOptionPane.showMessageDialog(this, "Each board tile must contain exactly one Character", "Invalid Board Configuration", JOptionPane.WARNING_MESSAGE);
 	else {
 	    
-	    ShowjResultPanel(false);
-	    ControljBoardPanel(false);
+	    boolean[] Stop = new boolean[1];
+	    Stop[0] = false;
 	    
+	    SwingUtilities.invokeLater(new ProgressBarTask(Stop)::start);
 	    GameTree Process = new GameTree(Board, WordList);
-	    Process.Begin();
+	    
+	    Process.Begin(Stop);
+	    Stop[0] = true;
+	    
 	    Result = Process.getResult();
 	    updateResultBoard();
 	    
-	    ControljBoardPanel(true);
-	    ShowjResultPanel(true);
-	    
 	}
+	ControljBoardPanel(true);
+	ShowjResultPanel(true);
     }//GEN-LAST:event_jSolveButtonActionPerformed
+
+    private void jRandomizeBoardMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRandomizeBoardMenuItemActionPerformed
+
+	Random R = new Random();
+	for(int i=0; i<4; i++) 
+	    for(int j=0; j<4; j++) {
+		int N = R.nextInt(26) + 65;
+		Board.setChar(new Point(i,j), (char)N);
+		setUIChar(new Point(i,j), (char)N);
+	    }
+    }//GEN-LAST:event_jRandomizeBoardMenuItemActionPerformed
+
+    private void jResetBoardMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jResetBoardMenuItemActionPerformed
+	for(int i=0; i<4; i++) 
+	    for(int j=0; j<4; j++) {
+		Board.setChar(new Point(i,j), 'X');
+		setUIChar(new Point(i,j), 'X');
+	    }
+    }//GEN-LAST:event_jResetBoardMenuItemActionPerformed
+
+    private void jWordListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jWordListValueChanged
+	try {
+	    if (!evt.getValueIsAdjusting()) {
+		int idx = evt.getFirstIndex();
+		if(idx == lastSel) idx = evt.getLastIndex();
+		lastSel = idx;
+
+		jWordDetailField.setText(Result.get(idx).getPath().toString());
+	    }
+	} catch(Exception e) {
+	}
+    }//GEN-LAST:event_jWordListValueChanged
+
+    private void jEditDictionaryMenuItemHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEditDictionaryMenuItemHelpActionPerformed
+        JOptionPane.showMessageDialog(this, "In the program directory, there is a text file called 'dictionary.txt'. Inside is a\n"
+		+ "list of word each separated by a newline. To add a new word to the valid word list\n"
+		+ "just add one anywhere to the text file; separated by newline; and restart the program.\n"
+		+ "To remove, just simply delete the word from the list.", "Dictionary Guide", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jEditDictionaryMenuItemHelpActionPerformed
     
     
     /**
@@ -625,21 +760,20 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
 	
     }
 
+    // <editor-fold defaultstate="collapsed" desc="Generated Variables declaration">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.border.BevelBorder bevelBorder1;
-    private java.awt.Label jBoardLabel;
     private javax.swing.JPanel jBoardPanel;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JDialog jDialog2;
-    private javax.swing.JMenuItem jEditDictionaryMenuItem6;
+    private javax.swing.JMenuItem jEditDictionaryMenuItemHelp;
     private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JMenuItem jHowToHelpMenuItem4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JList<String> jList1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JMenuItem jRandomizeBoardMenuItem;
     private javax.swing.JMenuItem jResetBoardMenuItem;
@@ -649,9 +783,11 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JButton jSolveButton;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTile1;
     private javax.swing.JTextField jTile10;
     private javax.swing.JTextField jTile11;
@@ -668,10 +804,10 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
     private javax.swing.JTextField jTile7;
     private javax.swing.JTextField jTile8;
     private javax.swing.JTextField jTile9;
-    private javax.swing.JTextField jTotalScoreField;
-    private javax.swing.JTextField jTotalWordField;
+    private javax.swing.JTextArea jWordDetailField;
     private javax.swing.JList<String> jWordList;
     private javax.swing.JList<String> jWordScoreList;
-    private javax.swing.JMenuItem jWordamentHelpMenuItem3;
     // End of variables declaration//GEN-END:variables
+    // </editor-fold>
+
 }
