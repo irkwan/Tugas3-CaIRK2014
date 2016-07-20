@@ -2,6 +2,8 @@
 package home;
 
 import solver.MainSolver;
+import solver.PathCreator;
+import detail.DetailIMG;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,11 +24,17 @@ public class board extends javax.swing.JFrame {
     // location of dictionary
     private final String dictLOC;
     
+    // final point of found words
+    private Integer finalPoint;
+    
     // final result of found words
     private List<String> finalResult;
     
     // total point of found words
     private List<Integer> totalPoint;
+    
+    // cell path
+    private List<PathCreator> cellPath;
     
     // solver's object pointer
     MainSolver ms;
@@ -72,6 +80,7 @@ public class board extends javax.swing.JFrame {
         jTable_foundwords = new javax.swing.JTable();
         jLabel_totaltitle = new javax.swing.JLabel();
         jLabel_totalvalue = new javax.swing.JLabel();
+        jButton_show = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -247,6 +256,14 @@ public class board extends javax.swing.JFrame {
         jLabel_totalvalue.setFont(new java.awt.Font("Cambria", 1, 18)); // NOI18N
         jLabel_totalvalue.setText("0");
 
+        jButton_show.setFont(new java.awt.Font("Cambria", 1, 18)); // NOI18N
+        jButton_show.setText("Show");
+        jButton_show.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_showActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -263,7 +280,9 @@ public class board extends javax.swing.JFrame {
                                 .addComponent(jPanel_matrix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(158, 158, 158)
-                                .addComponent(jButton_solve, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButton_show, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton_solve, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))))
                         .addGap(65, 65, 65)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -289,7 +308,9 @@ public class board extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel_totalvalue)
                         .addComponent(jLabel_totaltitle)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addGap(38, 38, 38)
+                .addComponent(jButton_show, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         pack();
@@ -393,15 +414,71 @@ public class board extends javax.swing.JFrame {
 
                 // get the total points
                 totalPoint = ms.getTotalPoint();
+            
+                // get the cumulated total points (final point)
+                finalPoint = ms.getFinalPoint();
                 
                 // show the words on table
-                new View().showWordsOnTable();
+                new View().showResult();
+                
+                // get the cell path
+                cellPath = ms.getCellPath();
                 
             } catch (IOException e) {}
         } else {
             showErrorMessage("board");
         }
     }//GEN-LAST:event_jButton_solveActionPerformed
+
+    private void jButton_showActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_showActionPerformed
+        
+        // KAMUS
+        Integer[] matchID;
+        int idxRow = jTable_foundwords.getSelectedRow();
+        
+        // ALGORITMA
+        if(idxRow != -1) {
+            // get the word
+            String clickedElmt_word = (jTable_foundwords.getModel().getValueAt(idxRow, 1).toString());
+        
+            List<PathCreator> fPC = new ArrayList<PathCreator>();
+            int counter = 0;
+            int comparedID = 0;
+            for (PathCreator pc : cellPath) {
+                if (pc.word.equals(clickedElmt_word)) {
+                    if (counter == 0) {
+                        counter = 1;
+                        comparedID = pc.id;
+                        fPC.add(pc);
+                        System.out.println(pc.id + " " + pc.word + " " + pc.idx + ", " + pc.idy);
+                    } else {
+                        if (pc.id == comparedID) {
+                            fPC.add(pc);
+                            System.out.println(pc.id + " " + pc.word + " " + pc.idx + ", " + pc.idy);
+                        }
+                    }
+                }
+            }
+            
+            int[] idxfPC = new int[fPC.size()];
+            for (int i = 0; i < fPC.size(); i++) {
+                idxfPC[i] = i;
+            }
+            
+            PathCreator.possibleID = new ArrayList<Integer[]>();
+            PathCreator.chosenfPC = fPC;
+            PathCreator.model = matrix;
+            PathCreator.Permute(idxfPC, 0);
+            matchID = PathCreator.getPath();
+            
+            DetailIMG DI = new DetailIMG(fPC, matchID);
+            DI.setVisible(true);
+            
+            // show the path of how to find the related word
+            DI.showHowTo();
+        }
+        
+    }//GEN-LAST:event_jButton_showActionPerformed
 
     /**
      * Class View
@@ -449,6 +526,25 @@ public class board extends javax.swing.JFrame {
         
         }
         
+        /**
+         * Show total points on label
+         */
+        public void showTotalPoints() {
+            jLabel_totalvalue.setText(Integer.toString(finalPoint));
+        }
+        
+        /**
+         * Show all final outputs
+         */
+        public void showResult() {
+            
+            // show results on table
+            showWordsOnTable();
+            
+            // show total points
+            showTotalPoints();
+        }
+        
     }
     
     /**
@@ -487,6 +583,7 @@ public class board extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton_show;
     private javax.swing.JButton jButton_solve;
     private javax.swing.JLabel jLabel_title;
     private javax.swing.JLabel jLabel_totaltitle;

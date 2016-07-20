@@ -14,11 +14,14 @@ import java.util.Set;
  * @author Albertus Kelvin
  */
 public class MainSolver {
+
+    private int idx = 0;
     
     private char[][] matrix = new char[4][4];
     private static Set<String> validWords = new HashSet<String>();
     private List<String> finalResult;
     private List<Integer> totalPoint;
+    private List<PathCreator> cellPath = new ArrayList<PathCreator>();
     private final String dictLOC;
     
     public MainSolver(char[][] matrixVal, String dictLOC) {
@@ -35,6 +38,10 @@ public class MainSolver {
         return finalResult;
     }
     
+    public List<PathCreator> getCellPath() {
+        return cellPath;
+    }
+    
     /**
      * GET the total point for each found words,
      * where each character worths one point
@@ -49,6 +56,23 @@ public class MainSolver {
         }
         
         return totalPoint;
+    }
+    
+    /**
+     * GET the cumulated total point
+     * @return final point
+     */
+    public Integer getFinalPoint() {
+        
+        // KAMUS
+        Integer point = 0;
+        
+        // ALGORITMA
+        for (Integer val : totalPoint) {
+            point = point + val;
+        }
+        
+        return point;
     }
     
     /**
@@ -75,11 +99,12 @@ public class MainSolver {
                 return o2.length() - o1.length();
             }
         });
-
+        
+        /*
         for (String word : finalResult) {
             System.out.println("OK: " + word);
         }
-        
+        */
     }
     
     /**
@@ -90,15 +115,29 @@ public class MainSolver {
      * @param node The node we have just visited.
      * @param current The currently formulated word.
      */
-    private static void traverse(char[][] grid, boolean[][] visited, int i, int j, Node node, String current) {
+    private void traverse(char[][] grid, boolean[][] visited, int i, int j, Node node, String current) {
         char c = grid[i][j];
         String newStr = current + Character.toString(c);
         Node next = node.getNode(c);
 
         if (next != null) {
+            
             visited[i][j] = true;
             if (next.isWord() && newStr.length() > 2) {
                 validWords.add(newStr);
+                
+                ///////////////////////
+                for (int xx = 0; xx < 4; xx++) {
+                    for (int yy = 0; yy < 4; yy++) {
+                        if (visited[xx][yy]) {
+                            cellPath.add(new PathCreator(idx, newStr, xx, yy));
+                        } 
+                    }
+                }
+                
+                idx++;
+                
+                ///////////////////////
             }
 
             if (j < 3 && !visited[i][j + 1]) {
