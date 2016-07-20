@@ -1,17 +1,26 @@
 
 package home;
 
+import mymodule.ExtensionFilter;
+
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Albertus Kelvin
  */
 public class gamerules extends javax.swing.JFrame {
 
+    private String dictLOC;
+    
     /**
      * Creates new form gamerules
      */
     public gamerules() {
         initComponents();
+        jText_dictpath.setEditable(false);
     }
 
     /**
@@ -36,6 +45,9 @@ public class gamerules extends javax.swing.JFrame {
         jLabel_rules4b = new javax.swing.JLabel();
         jLabel_rules0a = new javax.swing.JLabel();
         jButton_next = new javax.swing.JButton();
+        jLabel_dictpath = new javax.swing.JLabel();
+        jText_dictpath = new javax.swing.JTextField();
+        jButton_dictpath = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
 
@@ -122,22 +134,46 @@ public class gamerules extends javax.swing.JFrame {
             }
         });
 
+        jLabel_dictpath.setFont(new java.awt.Font("Cambria", 1, 14)); // NOI18N
+        jLabel_dictpath.setText("Dictionary path:");
+
+        jText_dictpath.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+
+        jButton_dictpath.setFont(new java.awt.Font("Cambria", 1, 14)); // NOI18N
+        jButton_dictpath.setText("Browse");
+        jButton_dictpath.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_dictpathActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(jPanel_rules, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addComponent(jPanel_rules, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(86, 86, 86)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jText_dictpath, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton_dictpath))
+                            .addComponent(jLabel_dictpath))))
                 .addContainerGap(54, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel_title)
-                .addGap(180, 180, 180))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton_next, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(261, 261, 261))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel_title)
+                        .addGap(180, 180, 180))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton_next, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(260, 260, 260))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,20 +182,79 @@ public class gamerules extends javax.swing.JFrame {
                 .addComponent(jLabel_title)
                 .addGap(42, 42, 42)
                 .addComponent(jPanel_rules, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
+                .addGap(26, 26, 26)
+                .addComponent(jLabel_dictpath)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jText_dictpath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton_dictpath))
+                .addGap(43, 43, 43)
                 .addComponent(jButton_next, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton_nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_nextActionPerformed
-        String[] args = {};
+    /**
+     * Validate the dictionary path/ location
+     * @return true if the dictionary path is located, false otherwise 
+     */
+    private boolean validateDictPath() {
         
-        board.main(args);
-        this.setVisible(false);
+        // KAMUS
+        boolean valid = true;
+        
+        // ALGORITMA
+        if (jText_dictpath.getText().equals("")) {
+            valid = false;
+            JOptionPane.showMessageDialog(this, "You haven't determined the dictionary location yet", "Invalid Next Action", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return valid;
+    }
+    
+    private void jButton_nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_nextActionPerformed
+        
+        // KAMUS
+        String[] args = new String[1];
+        boolean dictpathValidity;
+        
+        // ALGORITMA
+        
+        // validate the dictionary path
+        dictpathValidity = validateDictPath();
+        
+        if (dictpathValidity) {
+            dictLOC = jText_dictpath.getText();
+            args[0] = dictLOC;
+            board.main(args);
+            this.setVisible(false);
+        }
     }//GEN-LAST:event_jButton_nextActionPerformed
+
+    private void jButton_dictpathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_dictpathActionPerformed
+        
+        // KAMUS
+        int result;
+        File selectedFile;
+        
+        // ALGORITMA
+        JFileChooser fileChooser = new JFileChooser();
+        
+        // penambahan opsi untuk mem-filter file yang berekstensi .arff 
+        fileChooser.addChoosableFileFilter(new ExtensionFilter("txt","File in TXT format") );
+        
+        // inisiasi direktori awal pencarian file pada direktori home
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        
+        result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            // jika user sudah memilih sebuah file
+            selectedFile = fileChooser.getSelectedFile();
+            jText_dictpath.setText(selectedFile.getAbsolutePath());
+        }
+    }//GEN-LAST:event_jButton_dictpathActionPerformed
 
     /**
      * @param args the command line arguments
@@ -197,9 +292,11 @@ public class gamerules extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton_dictpath;
     private javax.swing.JButton jButton_next;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel_dictpath;
     private javax.swing.JLabel jLabel_rules0a;
     private javax.swing.JLabel jLabel_rules1a;
     private javax.swing.JLabel jLabel_rules1b;
@@ -210,5 +307,6 @@ public class gamerules extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_rules4b;
     private javax.swing.JLabel jLabel_title;
     private javax.swing.JPanel jPanel_rules;
+    private javax.swing.JTextField jText_dictpath;
     // End of variables declaration//GEN-END:variables
 }

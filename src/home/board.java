@@ -3,7 +3,12 @@ package home;
 
 import solver.MainSolver;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -14,11 +19,25 @@ public class board extends javax.swing.JFrame {
     // matrix of wordament 
     private char[][] matrix = new char[4][4];
     
+    // location of dictionary
+    private final String dictLOC;
+    
+    // final result of found words
+    private List<String> finalResult;
+    
+    // total point of found words
+    private List<Integer> totalPoint;
+    
+    // solver's object pointer
+    MainSolver ms;
+    
     /**
      * Creates new form board
+     * @param dictLOC location of dictionary
      */
-    public board() {
+    public board(String dictLOC) {
         initComponents();
+        this.dictLOC = dictLOC;  
     }
 
     /**
@@ -206,9 +225,7 @@ public class board extends javax.swing.JFrame {
         jTable_foundwords.setFont(new java.awt.Font("Cambria", 1, 14)); // NOI18N
         jTable_foundwords.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "ID", "Words", "Point"
@@ -363,16 +380,81 @@ public class board extends javax.swing.JFrame {
         boardValidity = validateBoard();
         if (boardValidity) {
             initMatrix();
-            new MainSolver(matrix).solve();
+            
+            // create a solver's object
+            ms = new MainSolver(matrix, dictLOC);
+            
+            try {
+                // solve the wordament
+                ms.solve();
+
+                // get the found words
+                finalResult = ms.getResult();
+
+                // get the total points
+                totalPoint = ms.getTotalPoint();
+                
+                // show the words on table
+                new View().showWordsOnTable();
+                
+            } catch (IOException e) {}
         } else {
             showErrorMessage("board");
         }
     }//GEN-LAST:event_jButton_solveActionPerformed
 
     /**
+     * Class View
+     * Responsible to show all outputs on the board
+     */
+    private class View {
+        
+        /**
+         * Clear all elements on table
+         */
+        public void clearTable() {
+            DefaultTableModel model = (DefaultTableModel) jTable_foundwords.getModel();
+            model.setRowCount(0);
+        }
+        
+        /**
+        * Show the found words on table, including
+        * their ID, body, and point
+        */
+        public void showWordsOnTable() {
+            
+            // KAMUS 
+            Object[][] data = new Object[finalResult.size()][3];
+            String[] header = {"ID", "Words", "Point"};
+            
+            // ALGORITMA
+            
+            // clear the table
+            clearTable();
+            
+            // fill the data object with all of the found words
+            for (int i = 0; i < finalResult.size(); i++) {
+                data[i][0] = i;
+                data[i][1] = finalResult.get(i);
+                data[i][2] = totalPoint.get(i);
+            }
+        
+            // update isi tabel foundwords
+            jTable_foundwords.setModel(new DefaultTableModel(data, header) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            });
+        
+        }
+        
+    }
+    
+    /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -399,7 +481,7 @@ public class board extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new board().setVisible(true);
+                new board(args[0]).setVisible(true);
             }
         });
     }

@@ -17,32 +17,69 @@ public class MainSolver {
     
     private char[][] matrix = new char[4][4];
     private static Set<String> validWords = new HashSet<String>();
-
-    public MainSolver(char[][] matrixVal) {
+    private List<String> finalResult;
+    private List<Integer> totalPoint;
+    private final String dictLOC;
+    
+    public MainSolver(char[][] matrixVal, String dictLOC) {
         matrix = matrixVal;
+        this.dictLOC = dictLOC;
+        validWords.clear();
     }
     
+    /**
+     * GET the final result of found words
+     * @return list of found words 
+     */
+    public List<String> getResult() {
+        return finalResult;
+    }
+    
+    /**
+     * GET the total point for each found words,
+     * where each character worths one point
+     * @return list of total point 
+     */
+    public List<Integer> getTotalPoint() {
+        
+        totalPoint = new ArrayList<Integer>();
+        
+        for (String word : finalResult) {
+            totalPoint.add(word.length());
+        }
+        
+        return totalPoint;
+    }
+    
+    /**
+     * Solver master, where it will call the words tree creator and
+     * determine the valid words
+     * @throws IOException if program can not find or open the dictionary 
+     */
     public void solve() throws IOException {
         
-        Node root = ModelCreator.init();
-        
+        Node root = new ModelCreator(dictLOC).init();
+
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 traverse(matrix, new boolean[4][4], i, j, root, "");
             }
         }
+        
+        finalResult = new ArrayList<String>(validWords);
+        
+        Collections.sort(finalResult, new Comparator<String>() {
 
-        List<String> temp = new ArrayList<String>(validWords);
-        Collections.sort(temp, new Comparator<String>() {
-
-            public int compare(String val0, String val1) {
-                return val1.length() - val0.length();
+            @Override
+            public int compare(String o1, String o2) {
+                return o2.length() - o1.length();
             }
         });
-        
-        for (String word : temp) {
+
+        for (String word : finalResult) {
             System.out.println("OK: " + word);
         }
+        
     }
     
     /**
