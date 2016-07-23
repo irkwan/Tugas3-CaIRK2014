@@ -13,23 +13,19 @@ This program created for IRK recruitment process
 #include <locale>
 using namespace std;
 
-// global variable
-vector<string> tab_word;
-char board[4][4];
-
-void loadDictionary(){
+void loadDictionary(vector<string>& tab_words){
 	ifstream dict("dictionary.txt");
 	string temp;
 	
 	if(dict.is_open()) {
 		while(getline(dict,temp)){
-			tab_word.push_back(temp);
+			tab_words.push_back(temp);
 		}
 		dict.close();
 	}
 }
 
-void initBoard(){
+void initBoard(char** board){
 	for(int i = 0; i < 4; i++){
 		for(int j = 0; j < 4; j++){
 			cin >> board[i][j];
@@ -38,7 +34,7 @@ void initBoard(){
 	}
 }
 
-void printBoard(){
+void printBoard(char** board){
 	for(int i = 0; i < 4; i++){
 		for(int j = 0; j < 4; j++){
 			cout << board[i][j] << " ";
@@ -47,7 +43,7 @@ void printBoard(){
 	}
 }
 
-bool findmatch(string pat, int x, int y, int level)
+bool findmatch(char** board,string pat, int x, int y, int level)
 {
     if (level == pat.length()) //pattern matched
         return true;
@@ -65,14 +61,14 @@ bool findmatch(string pat, int x, int y, int level)
         board[x][y] = '#';       
              
         //finding next char pattern in 8 neighbours     
-        res = findmatch(pat, x-1, y,level+1)   ||
-              findmatch(pat, x+1, y,level+1)   ||
-              findmatch(pat, x, y-1,level+1)   ||
-              findmatch(pat, x, y+1,level+1)   ||
-              findmatch(pat, x+1, y+1,level+1) ||
-              findmatch(pat, x+1, y-1,level+1) ||
-              findmatch(pat, x-1, y+1,level+1) ||
-              findmatch(pat, x-1, y-1,level+1);
+        res = findmatch(board,pat, x-1, y,level+1)   ||
+              findmatch(board,pat, x+1, y,level+1)   ||
+              findmatch(board,pat, x, y-1,level+1)   ||
+              findmatch(board,pat, x, y+1,level+1)   ||
+              findmatch(board,pat, x+1, y+1,level+1) ||
+              findmatch(board,pat, x+1, y-1,level+1) ||
+              findmatch(board,pat, x-1, y+1,level+1) ||
+              findmatch(board,pat, x-1, y-1,level+1);
 
         //marking this cell as unused
         board[x][y] = temp;
@@ -82,7 +78,7 @@ bool findmatch(string pat, int x, int y, int level)
         return false;
 }
 
-bool isfind(string pat)
+bool isfind(char** board,string pat)
 {
  // if total characters in matrix is less then pattern lenghth
     if (pat.length() > 16)
@@ -92,7 +88,7 @@ bool isfind(string pat)
     	for (int j=0; j<4; j++){
 
       		if (board[i][j] == pat[0])
-                    if(findmatch(pat, i, j, 0)) 
+                    if(findmatch(board,pat, i, j, 0)) 
                           return true;
      	}
      }
@@ -100,12 +96,18 @@ bool isfind(string pat)
 }
 
 int main() {
-	loadDictionary();
-	initBoard();
-	printBoard();
+	char** board = new char*[4];
+	for(int i = 0; i < 4; i++){
+		board[i] = new char[4];
+	}
+	vector<string> tab_words;
+	
+	loadDictionary(tab_words);
+	initBoard(board);
 	int score = 0, word_found = 0;
-	for(string pat : tab_word){
-		if(isfind(pat)){
+	
+	for(string pat : tab_words){
+		if(isfind(board,pat)){
 			cout << pat << "  " << pat.length() << endl;
 			score += pat.length();
 			word_found++;
