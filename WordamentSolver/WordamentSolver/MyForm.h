@@ -82,6 +82,7 @@ namespace WordamentSolver {
 	private: System::Windows::Forms::ToolStripMenuItem^  aboutToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  helpToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  aboutToolStripMenuItem1;
+	private: System::Windows::Forms::ProgressBar^  progressBar1;
 
 	protected:
 
@@ -101,8 +102,8 @@ namespace WordamentSolver {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::ListViewItem^  listViewItem1 = (gcnew System::Windows::Forms::ListViewItem(L""));
-			System::Windows::Forms::ListViewItem^  listViewItem2 = (gcnew System::Windows::Forms::ListViewItem(L""));
+			System::Windows::Forms::ListViewItem^  listViewItem5 = (gcnew System::Windows::Forms::ListViewItem(L""));
+			System::Windows::Forms::ListViewItem^  listViewItem6 = (gcnew System::Windows::Forms::ListViewItem(L""));
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->textBox16 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox15 = (gcnew System::Windows::Forms::TextBox());
@@ -143,6 +144,7 @@ namespace WordamentSolver {
 			this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->progressBar1 = (gcnew System::Windows::Forms::ProgressBar());
 			this->panel1->SuspendLayout();
 			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
@@ -421,8 +423,8 @@ namespace WordamentSolver {
 			// listView1
 			// 
 			this->listView1->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(2) { this->columnHeader1, this->columnHeader2 });
-			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(2) { listViewItem1, listViewItem2 });
-			this->listView1->Location = System::Drawing::Point(22, 244);
+			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(2) { listViewItem5, listViewItem6 });
+			this->listView1->Location = System::Drawing::Point(22, 284);
 			this->listView1->Name = L"listView1";
 			this->listView1->Size = System::Drawing::Size(502, 201);
 			this->listView1->TabIndex = 13;
@@ -476,20 +478,23 @@ namespace WordamentSolver {
 			// solveToolStripMenuItem
 			// 
 			this->solveToolStripMenuItem->Name = L"solveToolStripMenuItem";
-			this->solveToolStripMenuItem->Size = System::Drawing::Size(102, 22);
+			this->solveToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->solveToolStripMenuItem->Text = L"Solve";
+			this->solveToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::solveToolStripMenuItem_Click);
 			// 
 			// clearToolStripMenuItem
 			// 
 			this->clearToolStripMenuItem->Name = L"clearToolStripMenuItem";
-			this->clearToolStripMenuItem->Size = System::Drawing::Size(102, 22);
+			this->clearToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->clearToolStripMenuItem->Text = L"Clear";
+			this->clearToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::clearToolStripMenuItem_Click);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(102, 22);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->exitToolStripMenuItem->Text = L"Exit";
+			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::exitToolStripMenuItem_Click);
 			// 
 			// aboutToolStripMenuItem
 			// 
@@ -513,11 +518,20 @@ namespace WordamentSolver {
 			this->aboutToolStripMenuItem1->Size = System::Drawing::Size(107, 22);
 			this->aboutToolStripMenuItem1->Text = L"About";
 			// 
+			// progressBar1
+			// 
+			this->progressBar1->Location = System::Drawing::Point(22, 246);
+			this->progressBar1->Name = L"progressBar1";
+			this->progressBar1->Size = System::Drawing::Size(502, 23);
+			this->progressBar1->Style = System::Windows::Forms::ProgressBarStyle::Continuous;
+			this->progressBar1->TabIndex = 16;
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(547, 457);
+			this->ClientSize = System::Drawing::Size(547, 497);
+			this->Controls->Add(this->progressBar1);
 			this->Controls->Add(this->label6);
 			this->Controls->Add(this->listView1);
 			this->Controls->Add(this->button1);
@@ -577,6 +591,13 @@ namespace WordamentSolver {
 		}
 	}
 
+	bool isBoardValid() {
+		return !(textBox1->Equals("") && textBox2->Equals("") && textBox3->Equals("") && textBox4->Equals("") &&
+			textBox5->Equals("") && textBox6->Equals("") && textBox7->Equals("") && textBox8->Equals("") &&
+			textBox9->Equals("") && textBox10->Equals("") && textBox11->Equals("") && textBox12->Equals("") &&
+			textBox13->Equals("") && textBox14->Equals("") && textBox15->Equals("") && textBox16->Equals(""));
+	}
+
 	private: System::Void solve_Click(System::Object^  sender, System::EventArgs^  e) {
 		char** board;
 		board = new char*[4];
@@ -586,21 +607,25 @@ namespace WordamentSolver {
 		}
 		initMatriks(board);
 		loadDictionary(tab_words);
+		progressBar1->Value = 10;
 
 		// solving process
-		int scores = 0, word_found = 0;
+		int scores = 0, word_found = 0,count = 0;
 		for (string pat : tab_words) {
 			if (isfind(board, pat)) {
+				count++;
+				if(count % 4 == 0)
+					progressBar1->Increment(1);
 				scores += pat.length();
 				word_found++;
 				String^ str3 = gcnew String(pat.c_str());
 				ListViewItem^ newitem = gcnew ListViewItem(str3);
 				newitem->SubItems->Add(System::Convert::ToString(pat.length()));
 				listView1->Items->Add(newitem);
-				/*listView1->Items->ListViewItem[0]->SubItems->Add(str3);
-				listView1->Items->ListViewItem[1]->SubItems->Add(System::Convert::ToString(pat.length()));*/
 			}
 		}
+		progressBar1->Value = 100;
+		MessageBox::Show("Program Finished");
 		wordsfound->Text = System::Convert::ToString(word_found);
 		score->Text = System::Convert::ToString(scores);
 	}
@@ -664,6 +689,7 @@ namespace WordamentSolver {
 		wordsfound->Text = "-";
 		score->Text = "-";
 		listView1->Items->Clear();
+		progressBar1->Value = 0;
 		textBox1->Clear();			textBox5->Clear();
 		textBox2->Clear();			textBox6->Clear();
 		textBox3->Clear();			textBox7->Clear();
@@ -674,6 +700,59 @@ namespace WordamentSolver {
 		textBox11->Clear();			textBox15->Clear();
 		textBox12->Clear();			textBox16->Clear();
 			
+	}
+
+	// menu strip code 
+	private: System::Void solveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		char** board;
+		board = new char*[4];
+		vector<string> tab_words;
+		for (int i = 0; i < 4; i++) {
+			board[i] = new char[4];
+		}
+		initMatriks(board);
+		loadDictionary(tab_words);
+		progressBar1->Value = 10;
+
+		// solving process
+		int scores = 0, word_found = 0, count = 0;
+		for (string pat : tab_words) {
+			if (isfind(board, pat)) {
+				count++;
+				if (count % 4 == 0)
+					progressBar1->Increment(1);
+				scores += pat.length();
+				word_found++;
+				String^ str3 = gcnew String(pat.c_str());
+				ListViewItem^ newitem = gcnew ListViewItem(str3);
+				newitem->SubItems->Add(System::Convert::ToString(pat.length()));
+				listView1->Items->Add(newitem);
+			}
+		}
+		progressBar1->Value = 100;
+		MessageBox::Show("Program Finished");
+		wordsfound->Text = System::Convert::ToString(word_found);
+		score->Text = System::Convert::ToString(scores);
+	}
+
+	private: System::Void clearToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		wordsfound->Text = "-";
+		score->Text = "-";
+		listView1->Items->Clear();
+		progressBar1->Value = 0;
+		textBox1->Clear();			textBox5->Clear();
+		textBox2->Clear();			textBox6->Clear();
+		textBox3->Clear();			textBox7->Clear();
+		textBox4->Clear();			textBox8->Clear();
+
+		textBox9->Clear();			textBox13->Clear();
+		textBox10->Clear();			textBox14->Clear();
+		textBox11->Clear();			textBox15->Clear();
+		textBox12->Clear();			textBox16->Clear();
+	}
+
+	private: System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		Application::Exit();
 	}
 };
 }
