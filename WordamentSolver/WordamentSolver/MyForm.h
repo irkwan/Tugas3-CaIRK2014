@@ -4,6 +4,8 @@
 #include <locale>
 #include <msclr\marshal.h>
 #include <fstream>
+#include <conio.h>
+#include <windows.h>
 using namespace std;
 
 namespace WordamentSolver {
@@ -20,6 +22,9 @@ namespace WordamentSolver {
 	/// </summary>
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
+		static int second = 120;
+		bool finished = false;
+
 	public:
 		MyForm(void)
 		{
@@ -84,6 +89,8 @@ namespace WordamentSolver {
 	private: System::Windows::Forms::ToolStripMenuItem^  aboutToolStripMenuItem1;
 	private: System::Windows::Forms::ProgressBar^  progressBar1;
 
+	private: System::Windows::Forms::Label^  label7;
+
 	protected:
 
 
@@ -145,6 +152,7 @@ namespace WordamentSolver {
 			this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->progressBar1 = (gcnew System::Windows::Forms::ProgressBar());
+			this->label7 = (gcnew System::Windows::Forms::Label());
 			this->panel1->SuspendLayout();
 			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
@@ -328,7 +336,7 @@ namespace WordamentSolver {
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(294, 139);
+			this->label2->Location = System::Drawing::Point(252, 148);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(71, 13);
 			this->label2->TabIndex = 2;
@@ -337,7 +345,7 @@ namespace WordamentSolver {
 			// label3
 			// 
 			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(294, 119);
+			this->label3->Location = System::Drawing::Point(252, 128);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(80, 13);
 			this->label3->TabIndex = 3;
@@ -346,7 +354,7 @@ namespace WordamentSolver {
 			// label4
 			// 
 			this->label4->AutoSize = true;
-			this->label4->Location = System::Drawing::Point(294, 158);
+			this->label4->Location = System::Drawing::Point(252, 167);
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(92, 13);
 			this->label4->TabIndex = 4;
@@ -355,7 +363,7 @@ namespace WordamentSolver {
 			// wordsfound
 			// 
 			this->wordsfound->AutoSize = true;
-			this->wordsfound->Location = System::Drawing::Point(431, 119);
+			this->wordsfound->Location = System::Drawing::Point(389, 128);
 			this->wordsfound->Name = L"wordsfound";
 			this->wordsfound->Size = System::Drawing::Size(10, 13);
 			this->wordsfound->TabIndex = 5;
@@ -364,7 +372,7 @@ namespace WordamentSolver {
 			// score
 			// 
 			this->score->AutoSize = true;
-			this->score->Location = System::Drawing::Point(431, 139);
+			this->score->Location = System::Drawing::Point(389, 148);
 			this->score->Name = L"score";
 			this->score->Size = System::Drawing::Size(10, 13);
 			this->score->TabIndex = 6;
@@ -373,7 +381,7 @@ namespace WordamentSolver {
 			// remainingtime
 			// 
 			this->remainingtime->AutoSize = true;
-			this->remainingtime->Location = System::Drawing::Point(431, 158);
+			this->remainingtime->Location = System::Drawing::Point(389, 167);
 			this->remainingtime->Name = L"remainingtime";
 			this->remainingtime->Size = System::Drawing::Size(10, 13);
 			this->remainingtime->TabIndex = 7;
@@ -404,7 +412,7 @@ namespace WordamentSolver {
 			this->label5->AutoSize = true;
 			this->label5->Font = (gcnew System::Drawing::Font(L"Segoe Print", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label5->Location = System::Drawing::Point(337, 74);
+			this->label5->Location = System::Drawing::Point(295, 83);
 			this->label5->Name = L"label5";
 			this->label5->Size = System::Drawing::Size(90, 26);
 			this->label5->TabIndex = 11;
@@ -447,7 +455,7 @@ namespace WordamentSolver {
 			this->label6->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label6->ForeColor = System::Drawing::SystemColors::HotTrack;
-			this->label6->Location = System::Drawing::Point(149, 28);
+			this->label6->Location = System::Drawing::Point(75, 24);
 			this->label6->Name = L"label6";
 			this->label6->Size = System::Drawing::Size(242, 28);
 			this->label6->TabIndex = 14;
@@ -478,21 +486,21 @@ namespace WordamentSolver {
 			// solveToolStripMenuItem
 			// 
 			this->solveToolStripMenuItem->Name = L"solveToolStripMenuItem";
-			this->solveToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->solveToolStripMenuItem->Size = System::Drawing::Size(102, 22);
 			this->solveToolStripMenuItem->Text = L"Solve";
 			this->solveToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::solveToolStripMenuItem_Click);
 			// 
 			// clearToolStripMenuItem
 			// 
 			this->clearToolStripMenuItem->Name = L"clearToolStripMenuItem";
-			this->clearToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->clearToolStripMenuItem->Size = System::Drawing::Size(102, 22);
 			this->clearToolStripMenuItem->Text = L"Clear";
 			this->clearToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::clearToolStripMenuItem_Click);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(102, 22);
 			this->exitToolStripMenuItem->Text = L"Exit";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::exitToolStripMenuItem_Click);
 			// 
@@ -526,11 +534,23 @@ namespace WordamentSolver {
 			this->progressBar1->Style = System::Windows::Forms::ProgressBarStyle::Continuous;
 			this->progressBar1->TabIndex = 16;
 			// 
+			// label7
+			// 
+			this->label7->AutoSize = true;
+			this->label7->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(134)));
+			this->label7->Location = System::Drawing::Point(388, 29);
+			this->label7->Name = L"label7";
+			this->label7->Size = System::Drawing::Size(101, 22);
+			this->label7->TabIndex = 17;
+			this->label7->Text = L"Time Left : ";
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(547, 497);
+			this->Controls->Add(this->label7);
 			this->Controls->Add(this->progressBar1);
 			this->Controls->Add(this->label6);
 			this->Controls->Add(this->listView1);
@@ -592,42 +612,55 @@ namespace WordamentSolver {
 	}
 
 	bool isBoardValid() {
-		return !(textBox1->Equals("") && textBox2->Equals("") && textBox3->Equals("") && textBox4->Equals("") &&
-			textBox5->Equals("") && textBox6->Equals("") && textBox7->Equals("") && textBox8->Equals("") &&
-			textBox9->Equals("") && textBox10->Equals("") && textBox11->Equals("") && textBox12->Equals("") &&
-			textBox13->Equals("") && textBox14->Equals("") && textBox15->Equals("") && textBox16->Equals(""));
+		if (textBox1->Text->Length==0 || textBox2->Text->Length==0 || textBox3->Text->Length==0 || textBox4->Text->Length==0
+			|| textBox5->Text->Length==0 || textBox6->Text->Length==0 || textBox7->Text->Length==0 || textBox8->Text->Length==0
+			|| textBox9->Text->Length==0 || textBox10->Text->Length==0 || textBox11->Text->Length==0 || textBox12->Text->Length==0
+			|| textBox13->Text->Length==0 || textBox14->Text->Length==0 || textBox15->Text->Length==0 || textBox16->Text->Length==0) {
+			return false;
+		}	
+		else {
+			return true;
+		}
 	}
 
 	private: System::Void solve_Click(System::Object^  sender, System::EventArgs^  e) {
-		char** board;
-		board = new char*[4];
-		vector<string> tab_words;
-		for (int i = 0; i < 4; i++) {
-			board[i] = new char[4];
-		}
-		initMatriks(board);
-		loadDictionary(tab_words);
-		progressBar1->Value = 10;
-
-		// solving process
-		int scores = 0, word_found = 0,count = 0;
-		for (string pat : tab_words) {
-			if (isfind(board, pat)) {
-				count++;
-				if(count % 4 == 0)
-					progressBar1->Increment(1);
-				scores += pat.length();
-				word_found++;
-				String^ str3 = gcnew String(pat.c_str());
-				ListViewItem^ newitem = gcnew ListViewItem(str3);
-				newitem->SubItems->Add(System::Convert::ToString(pat.length()));
-				listView1->Items->Add(newitem);
+		if (isBoardValid()) {
+			char** board;
+			board = new char*[4];
+			vector<string> tab_words;
+			for (int i = 0; i < 4; i++) {
+				board[i] = new char[4];
 			}
+			initMatriks(board);
+			loadDictionary(tab_words);
+			progressBar1->Value = 10;
+
+			// solving process
+			int scores = 0, word_found = 0, count = 0;
+			for (string pat : tab_words) {
+				if (second == 0)
+					break;
+
+				if (isfind(board, pat)) {
+					count++;
+					if (count % 4 == 0)
+						progressBar1->Increment(1);
+					scores += pat.length();
+					word_found++;
+					String^ str3 = gcnew String(pat.c_str());
+					ListViewItem^ newitem = gcnew ListViewItem(str3);
+					newitem->SubItems->Add(System::Convert::ToString(pat.length()));
+					listView1->Items->Add(newitem);
+				}
+			}
+			progressBar1->Value = 100;
+			MessageBox::Show("Program Finished");
+			wordsfound->Text = System::Convert::ToString(word_found);
+			score->Text = System::Convert::ToString(scores);
 		}
-		progressBar1->Value = 100;
-		MessageBox::Show("Program Finished");
-		wordsfound->Text = System::Convert::ToString(word_found);
-		score->Text = System::Convert::ToString(scores);
+		else {
+			MessageBox::Show("Please fill the whole board");
+		}
 	}
 
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -704,35 +737,40 @@ namespace WordamentSolver {
 
 	// menu strip code 
 	private: System::Void solveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-		char** board;
-		board = new char*[4];
-		vector<string> tab_words;
-		for (int i = 0; i < 4; i++) {
-			board[i] = new char[4];
-		}
-		initMatriks(board);
-		loadDictionary(tab_words);
-		progressBar1->Value = 10;
-
-		// solving process
-		int scores = 0, word_found = 0, count = 0;
-		for (string pat : tab_words) {
-			if (isfind(board, pat)) {
-				count++;
-				if (count % 4 == 0)
-					progressBar1->Increment(1);
-				scores += pat.length();
-				word_found++;
-				String^ str3 = gcnew String(pat.c_str());
-				ListViewItem^ newitem = gcnew ListViewItem(str3);
-				newitem->SubItems->Add(System::Convert::ToString(pat.length()));
-				listView1->Items->Add(newitem);
+		if (isBoardValid()) {
+			char** board;
+			board = new char*[4];
+			vector<string> tab_words;
+			for (int i = 0; i < 4; i++) {
+				board[i] = new char[4];
 			}
+			initMatriks(board);
+			loadDictionary(tab_words);
+			progressBar1->Value = 10;
+
+			// solving process
+			int scores = 0, word_found = 0, count = 0;
+			for (string pat : tab_words) {
+				if (isfind(board, pat)) {
+					count++;
+					if (count % 4 == 0)
+						progressBar1->Increment(1);
+					scores += pat.length();
+					word_found++;
+					String^ str3 = gcnew String(pat.c_str());
+					ListViewItem^ newitem = gcnew ListViewItem(str3);
+					newitem->SubItems->Add(System::Convert::ToString(pat.length()));
+					listView1->Items->Add(newitem);
+				}
+			}
+			progressBar1->Value = 100;
+			MessageBox::Show("Program Finished");
+			wordsfound->Text = System::Convert::ToString(word_found);
+			score->Text = System::Convert::ToString(scores);
 		}
-		progressBar1->Value = 100;
-		MessageBox::Show("Program Finished");
-		wordsfound->Text = System::Convert::ToString(word_found);
-		score->Text = System::Convert::ToString(scores);
+		else {
+			MessageBox::Show("Please fill the whole board");
+		}
 	}
 
 	private: System::Void clearToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -753,6 +791,14 @@ namespace WordamentSolver {
 
 	private: System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 		Application::Exit();
+	}
+
+	void cntdownTimer() {
+		while (!finished && second > 0) {
+			Sleep(1000);
+			second--;
+			textBox7->Text = "Time Left : " + System::Convert::ToString(second);
+		}
 	}
 };
 }
