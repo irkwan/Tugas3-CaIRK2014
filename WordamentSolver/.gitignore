@@ -1,3 +1,4 @@
 .idea/
 WordamentSolver.iml
 out/
+*.class

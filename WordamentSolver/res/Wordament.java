@@ -8,8 +8,8 @@ import java.util.Collections;
 
 public class Wordament{
 
-	public static ArrayList<String> res;
-	public static Trie t;
+	private static ArrayList<String> res;
+	private static Trie t;
 
 	private static char[][] m;
 	private final static int size = 4;
