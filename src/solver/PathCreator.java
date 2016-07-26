@@ -44,11 +44,13 @@ public class PathCreator {
             }
             
             if (valid) {
+                /*
                 System.out.print("GOTCHA: ");
                 for (int i = 0; i < chosenfPC.size(); i++) {
                     System.out.print(elmt[i] + " ");
                 }
                 System.out.println();
+                */
                 matchID = elmt;
                 break;
             }
@@ -61,11 +63,6 @@ public class PathCreator {
         int size = fPCID.length;
 
         if (size == initID + 1) {
-            for (int i = 0; i < size; i++) {
-                System.out.print(fPCID[i] + ",  ");
-            }
-            System.out.println();
-            System.out.println("##########################");
             
             // convert int[] into Integer[]
             Integer[] newArray = new Integer[size];
@@ -76,6 +73,7 @@ public class PathCreator {
            
             possibleID.add(newArray);
             
+            /*
             for (Integer[] elmt : possibleID) {
                 for (int j = 0; j < chosenfPC.size(); j++) {
                     System.out.print(Integer.toString(elmt[j]) + " ");
@@ -83,6 +81,7 @@ public class PathCreator {
                 System.out.println();
             }
             System.out.println("+++++++++++");
+            */
             
         } else {
             for (int i = initID; i < size; i++) {
@@ -100,6 +99,4 @@ public class PathCreator {
         }
     }
 
-    
-    
 }

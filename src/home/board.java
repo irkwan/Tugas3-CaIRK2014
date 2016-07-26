@@ -8,8 +8,15 @@ import detail.DetailIMG;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,6 +25,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class board extends javax.swing.JFrame {
 
+    int counter = 0;
+    static Timer timer;
+    
+    
     // matrix of wordament 
     private char[][] matrix = new char[4][4];
     
@@ -81,6 +92,9 @@ public class board extends javax.swing.JFrame {
         jLabel_totaltitle = new javax.swing.JLabel();
         jLabel_totalvalue = new javax.swing.JLabel();
         jButton_show = new javax.swing.JButton();
+        jProgressBar_solve = new javax.swing.JProgressBar();
+        jPanel_timer = new javax.swing.JPanel();
+        jLabel_timer = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -264,6 +278,27 @@ public class board extends javax.swing.JFrame {
             }
         });
 
+        jProgressBar_solve.setBackground(new java.awt.Color(0, 0, 0));
+
+        jPanel_timer.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Timer", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Cambria", 1, 14))); // NOI18N
+
+        jLabel_timer.setFont(new java.awt.Font("Cambria", 1, 24)); // NOI18N
+        jLabel_timer.setText("02:00");
+
+        javax.swing.GroupLayout jPanel_timerLayout = new javax.swing.GroupLayout(jPanel_timer);
+        jPanel_timer.setLayout(jPanel_timerLayout);
+        jPanel_timerLayout.setHorizontalGroup(
+            jPanel_timerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_timerLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel_timer)
+                .addGap(80, 80, 80))
+        );
+        jPanel_timerLayout.setVerticalGroup(
+            jPanel_timerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel_timer, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -271,37 +306,41 @@ public class board extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(jLabel_title))
+                        .addGap(45, 45, 45)
+                        .addComponent(jPanel_matrix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(45, 45, 45)
-                                .addComponent(jPanel_matrix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(158, 158, 158)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton_show, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton_solve, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))))
-                        .addGap(65, 65, 65)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(47, 47, 47)
-                                .addComponent(jLabel_totaltitle)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel_totalvalue, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(158, 158, 158)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton_show, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton_solve, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(96, 96, 96)
+                        .addComponent(jLabel_title)))
+                .addGap(65, 65, 65)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(jLabel_totaltitle)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel_totalvalue, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jProgressBar_solve, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel_timer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(65, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel_title)
-                .addGap(38, 38, 38)
+                .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel_matrix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel_title)
+                        .addGap(38, 38, 38)
+                        .addComponent(jPanel_matrix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel_timer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton_solve, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -309,8 +348,10 @@ public class board extends javax.swing.JFrame {
                         .addComponent(jLabel_totalvalue)
                         .addComponent(jLabel_totaltitle)))
                 .addGap(38, 38, 38)
-                .addComponent(jButton_show, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton_show, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jProgressBar_solve, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         pack();
@@ -402,13 +443,54 @@ public class board extends javax.swing.JFrame {
         if (boardValidity) {
             initMatrix();
             
+            
+            //create timer task to increment counter
+            TimerTask timerTask = new TimerTask() {
+
+                @Override
+                public void run() {
+                    counter++;
+                }
+            };
+            
+            //create thread to print counter value
+            Thread t = new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    while (true) {
+                        try {
+                            /*
+                            if (counter == 3) {
+                                System.out.println("Counter has reached 3 now will terminate");
+                                timer.cancel();//end the timer
+                                break;//end this loop
+                            }
+                            */
+                            jLabel_timer.setText(Integer.toString(counter));
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            });
+
+            
+            timer = new Timer("MyTimer");
+            timer.scheduleAtFixedRate(timerTask, 1, 1000);
+            t.start();
+            
+            
+            
             // create a solver's object
             ms = new MainSolver(matrix, dictLOC);
             
             try {
+                    
                 // solve the wordament
                 ms.solve();
-
+                
                 // get the found words
                 finalResult = ms.getResult();
 
@@ -418,13 +500,19 @@ public class board extends javax.swing.JFrame {
                 // get the cumulated total points (final point)
                 finalPoint = ms.getFinalPoint();
                 
+                
+                //////////////////////////////////////////////////
+                  
                 // show the words on table
                 new View().showResult();
                 
+                //////////////////////////////////////////////////
+                
                 // get the cell path
                 cellPath = ms.getCellPath();
-                
+                        
             } catch (IOException e) {}
+            
         } else {
             showErrorMessage("board");
         }
@@ -450,11 +538,11 @@ public class board extends javax.swing.JFrame {
                         counter = 1;
                         comparedID = pc.id;
                         fPC.add(pc);
-                        System.out.println(pc.id + " " + pc.word + " " + pc.idx + ", " + pc.idy);
+                        //System.out.println(pc.id + " " + pc.word + " " + pc.idx + ", " + pc.idy);
                     } else {
                         if (pc.id == comparedID) {
                             fPC.add(pc);
-                            System.out.println(pc.id + " " + pc.word + " " + pc.idx + ", " + pc.idy);
+                            //System.out.println(pc.id + " " + pc.word + " " + pc.idx + ", " + pc.idy);
                         }
                     }
                 }
@@ -476,6 +564,8 @@ public class board extends javax.swing.JFrame {
             
             // show the path of how to find the related word
             DI.showHowTo();
+        } else {
+            JOptionPane.showMessageDialog(this, "Choose one row from the table to see the detail", "No row chosen", JOptionPane.WARNING_MESSAGE);
         }
         
     }//GEN-LAST:event_jButton_showActionPerformed
@@ -495,6 +585,14 @@ public class board extends javax.swing.JFrame {
         }
         
         /**
+         * Update progress bar value
+         * @param newValue new percentage
+         */
+        public void updateBar(int newValue) {
+            jProgressBar_solve.setValue(newValue);
+        }
+        
+        /**
         * Show the found words on table, including
         * their ID, body, and point
         */
@@ -509,21 +607,50 @@ public class board extends javax.swing.JFrame {
             // clear the table
             clearTable();
             
-            // fill the data object with all of the found words
-            for (int i = 0; i < finalResult.size(); i++) {
-                data[i][0] = i;
-                data[i][1] = finalResult.get(i);
-                data[i][2] = totalPoint.get(i);
-            }
+            
+            //////////////////
+            
+            Thread tt = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+            
+                // fill the data object with all of the found words
+                for (int i = 0; i < finalResult.size(); i++) {
+                    data[i][0] = i;
+                    data[i][1] = finalResult.get(i);
+                    data[i][2] = totalPoint.get(i);
+                
+                    // insert a row
+                
+                    final Object dati0 = data[i][0];
+                    final Object dati1 = data[i][1];
+                    final Object dati2 = data[i][2];
+                
+                    DefaultTableModel model = (DefaultTableModel) jTable_foundwords.getModel();
+                    model.addRow(new Object[]{dati0, dati1, dati2});
+                
+                    try {
+                        Thread.sleep(100);
+                    } catch(InterruptedException ie) {}
+
+                }
         
+            }});
+                
+            tt.start();
+                
+            
             // update isi tabel foundwords
+            /*
             jTable_foundwords.setModel(new DefaultTableModel(data, header) {
                 @Override
                 public boolean isCellEditable(int row, int column) {
                     return false;
                 }
             });
-        
+            */
+            
         }
         
         /**
@@ -585,10 +712,13 @@ public class board extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_show;
     private javax.swing.JButton jButton_solve;
+    private javax.swing.JLabel jLabel_timer;
     private javax.swing.JLabel jLabel_title;
     private javax.swing.JLabel jLabel_totaltitle;
     private javax.swing.JLabel jLabel_totalvalue;
     private javax.swing.JPanel jPanel_matrix;
+    private javax.swing.JPanel jPanel_timer;
+    private javax.swing.JProgressBar jProgressBar_solve;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable_foundwords;
     private javax.swing.JTextField jText_00;
