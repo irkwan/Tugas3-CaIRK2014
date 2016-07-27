@@ -1,4 +1,6 @@
 #pragma once
+#using <System.dll>
+#using <System.Windows.Forms.dll>
 #include <vector>
 #include <string>
 #include <locale>
@@ -16,6 +18,7 @@ namespace WordamentSolver {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Threading;
 
 	/// <summary>
 	/// Summary for MyForm
@@ -23,7 +26,10 @@ namespace WordamentSolver {
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 		static int second = 120;
-		bool finished = false;
+
+			 bool finished = false;
+	private: System::ComponentModel::BackgroundWorker^  backgroundWorker1;
+	private: Thread^ s;
 
 	public:
 		MyForm(void)
@@ -109,8 +115,8 @@ namespace WordamentSolver {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::ListViewItem^  listViewItem5 = (gcnew System::Windows::Forms::ListViewItem(L""));
-			System::Windows::Forms::ListViewItem^  listViewItem6 = (gcnew System::Windows::Forms::ListViewItem(L""));
+			System::Windows::Forms::ListViewItem^  listViewItem3 = (gcnew System::Windows::Forms::ListViewItem(L""));
+			System::Windows::Forms::ListViewItem^  listViewItem4 = (gcnew System::Windows::Forms::ListViewItem(L""));
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->textBox16 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox15 = (gcnew System::Windows::Forms::TextBox());
@@ -153,6 +159,7 @@ namespace WordamentSolver {
 			this->aboutToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->progressBar1 = (gcnew System::Windows::Forms::ProgressBar());
 			this->label7 = (gcnew System::Windows::Forms::Label());
+			this->backgroundWorker1 = (gcnew System::ComponentModel::BackgroundWorker());
 			this->panel1->SuspendLayout();
 			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
@@ -431,7 +438,7 @@ namespace WordamentSolver {
 			// listView1
 			// 
 			this->listView1->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(2) { this->columnHeader1, this->columnHeader2 });
-			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(2) { listViewItem5, listViewItem6 });
+			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(2) { listViewItem3, listViewItem4 });
 			this->listView1->Location = System::Drawing::Point(22, 284);
 			this->listView1->Name = L"listView1";
 			this->listView1->Size = System::Drawing::Size(502, 201);
@@ -519,12 +526,14 @@ namespace WordamentSolver {
 			this->helpToolStripMenuItem->Name = L"helpToolStripMenuItem";
 			this->helpToolStripMenuItem->Size = System::Drawing::Size(107, 22);
 			this->helpToolStripMenuItem->Text = L"Help";
+			this->helpToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::helpToolStripMenuItem_Click);
 			// 
 			// aboutToolStripMenuItem1
 			// 
 			this->aboutToolStripMenuItem1->Name = L"aboutToolStripMenuItem1";
 			this->aboutToolStripMenuItem1->Size = System::Drawing::Size(107, 22);
 			this->aboutToolStripMenuItem1->Text = L"About";
+			this->aboutToolStripMenuItem1->Click += gcnew System::EventHandler(this, &MyForm::aboutToolStripMenuItem1_Click);
 			// 
 			// progressBar1
 			// 
@@ -541,9 +550,16 @@ namespace WordamentSolver {
 				static_cast<System::Byte>(134)));
 			this->label7->Location = System::Drawing::Point(388, 29);
 			this->label7->Name = L"label7";
-			this->label7->Size = System::Drawing::Size(101, 22);
+			this->label7->Size = System::Drawing::Size(131, 22);
 			this->label7->TabIndex = 17;
-			this->label7->Text = L"Time Left : ";
+			this->label7->Text = L"Time Left : 120";
+			// 
+			// backgroundWorker1
+			// 
+			this->backgroundWorker1->WorkerReportsProgress = true;
+			this->backgroundWorker1->DoWork += gcnew System::ComponentModel::DoWorkEventHandler(this, &MyForm::backgroundWorker1_DoWork);
+			this->backgroundWorker1->ProgressChanged += gcnew System::ComponentModel::ProgressChangedEventHandler(this, &MyForm::backgroundWorker1_ProgressChanged);
+			this->backgroundWorker1->RunWorkerCompleted += gcnew System::ComponentModel::RunWorkerCompletedEventHandler(this, &MyForm::backgroundWorker1_RunWorkerCompleted);
 			// 
 			// MyForm
 			// 
@@ -633,6 +649,9 @@ namespace WordamentSolver {
 			}
 			initMatriks(board);
 			loadDictionary(tab_words);
+			
+			// threading timer
+			this->backgroundWorker1->RunWorkerAsync();
 			progressBar1->Value = 10;
 
 			// solving process
@@ -653,10 +672,12 @@ namespace WordamentSolver {
 					listView1->Items->Add(newitem);
 				}
 			}
-			progressBar1->Value = 100;
+			progressBar1->Value = 100;		
+			finished = true;
 			MessageBox::Show("Program Finished");
 			wordsfound->Text = System::Convert::ToString(word_found);
 			score->Text = System::Convert::ToString(scores);
+			remainingtime->Text = System::Convert::ToString(second);
 		}
 		else {
 			MessageBox::Show("Please fill the whole board");
@@ -721,7 +742,11 @@ namespace WordamentSolver {
 	private: System::Void clearButton_Click(System::Object^  sender, System::EventArgs^  e) {
 		wordsfound->Text = "-";
 		score->Text = "-";
+		remainingtime->Text = "-";
+		label7->Text = "Time Left : 120";
+		second = 120;
 		listView1->Items->Clear();
+		finished = false;
 		progressBar1->Value = 0;
 		textBox1->Clear();			textBox5->Clear();
 		textBox2->Clear();			textBox6->Clear();
@@ -776,7 +801,11 @@ namespace WordamentSolver {
 	private: System::Void clearToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 		wordsfound->Text = "-";
 		score->Text = "-";
+		remainingtime->Text = "-";
+		label7->Text = "Time Left : 120";
+		second = 120;
 		listView1->Items->Clear();
+		finished = false;
 		progressBar1->Value = 0;
 		textBox1->Clear();			textBox5->Clear();
 		textBox2->Clear();			textBox6->Clear();
@@ -792,13 +821,31 @@ namespace WordamentSolver {
 	private: System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 		Application::Exit();
 	}
+	
+	// about and help code
+	private: System::Void helpToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		MessageBox::Show("Wordament Solver by Varian Caesar\n\nFill the board and click solve to start the program\nUse clear button to clear the board and the results\n\nenjoy then ^-^");
+	}
 
-	void cntdownTimer() {
+	private: System::Void aboutToolStripMenuItem1_Click(System::Object^  sender, System::EventArgs^  e) {
+		MessageBox::Show("Wordament Solver created by Varian Caesar / 13514041\nif you find any trouble or bug please contact : variancaesar@gmail.com ^-^");
+	}
+
+	// multithreading code for timer 
+	private: System::Void backgroundWorker1_DoWork(System::Object^  sender, System::ComponentModel::DoWorkEventArgs^  e) {
 		while (!finished && second > 0) {
-			Sleep(1000);
+			Thread :: Sleep(1000);
 			second--;
-			textBox7->Text = "Time Left : " + System::Convert::ToString(second);
+			this->backgroundWorker1->ReportProgress(second);
 		}
+	}
+
+	private: System::Void backgroundWorker1_RunWorkerCompleted(System::Object^  sender, System::ComponentModel::RunWorkerCompletedEventArgs^  e) {
+		label7->Text = "Time Left : " + System::Convert::ToString(second);
+	}
+
+	private: System::Void backgroundWorker1_ProgressChanged(System::Object^  sender, System::ComponentModel::ProgressChangedEventArgs^  e) {
+		label7->Text = "Time Left : " + System::Convert::ToString(second);
 	}
 };
 }
