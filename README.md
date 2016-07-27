@@ -1,5 +1,7 @@
 # README
 
+Executable file (JAR) ada dalam folder **dist**.
+
 ### Teknis (tidak ada dalam spek)
 > * Spek program ditulis ulang dan bisa dilihat saat pertama kali menjalankan _solver_.
 > * Timer akan berjalan bersamaan dengan _solver_.
