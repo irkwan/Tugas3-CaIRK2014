@@ -596,22 +596,22 @@ namespace WordamentSolver {
 		}
 #pragma endregion
 	void initMatriks(char** board) {
-		board[0][0] = System::Convert::ToChar(textBox1->Text);
-		board[0][1] = System::Convert::ToChar(textBox2->Text);
-		board[0][2] = System::Convert::ToChar(textBox3->Text);
-		board[0][3] = System::Convert::ToChar(textBox4->Text);
-		board[1][0] = System::Convert::ToChar(textBox5->Text);
-		board[1][1] = System::Convert::ToChar(textBox6->Text);
-		board[1][2] = System::Convert::ToChar(textBox7->Text);
-		board[1][3] = System::Convert::ToChar(textBox8->Text);
-		board[2][0] = System::Convert::ToChar(textBox9->Text);
-		board[2][1] = System::Convert::ToChar(textBox10->Text);
-		board[2][2] = System::Convert::ToChar(textBox11->Text);
-		board[2][3] = System::Convert::ToChar(textBox12->Text);
-		board[3][0] = System::Convert::ToChar(textBox13->Text);
-		board[3][1] = System::Convert::ToChar(textBox14->Text);
-		board[3][2] = System::Convert::ToChar(textBox15->Text);
-		board[3][3] = System::Convert::ToChar(textBox16->Text);
+		board[0][0] = tolower(System::Convert::ToChar(textBox1->Text));
+		board[0][1] = tolower(System::Convert::ToChar(textBox2->Text));
+		board[0][2] = tolower(System::Convert::ToChar(textBox3->Text));
+		board[0][3] = tolower(System::Convert::ToChar(textBox4->Text));
+		board[1][0] = tolower(System::Convert::ToChar(textBox5->Text));
+		board[1][1] = tolower(System::Convert::ToChar(textBox6->Text));
+		board[1][2] = tolower(System::Convert::ToChar(textBox7->Text));
+		board[1][3] = tolower(System::Convert::ToChar(textBox8->Text));
+		board[2][0] = tolower(System::Convert::ToChar(textBox9->Text));
+		board[2][1] = tolower(System::Convert::ToChar(textBox10->Text));
+		board[2][2] = tolower(System::Convert::ToChar(textBox11->Text));
+		board[2][3] = tolower(System::Convert::ToChar(textBox12->Text));
+		board[3][0] = tolower(System::Convert::ToChar(textBox13->Text));
+		board[3][1] = tolower(System::Convert::ToChar(textBox14->Text));
+		board[3][2] = tolower(System::Convert::ToChar(textBox15->Text));
+		board[3][3] = tolower(System::Convert::ToChar(textBox16->Text));
 	}
 
 	void loadDictionary(vector<string>& tab_words) {
