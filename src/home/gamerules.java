@@ -44,6 +44,7 @@ public class gamerules extends javax.swing.JFrame {
         jLabel_rules4a = new javax.swing.JLabel();
         jLabel_rules4b = new javax.swing.JLabel();
         jLabel_rules0a = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jButton_next = new javax.swing.JButton();
         jLabel_dictpath = new javax.swing.JLabel();
         jText_dictpath = new javax.swing.JTextField();
@@ -84,6 +85,9 @@ public class gamerules extends javax.swing.JFrame {
         jLabel_rules0a.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
         jLabel_rules0a.setText("0. Program memiliki struktur data matriks 4x4 (character)");
 
+        jLabel3.setFont(new java.awt.Font("Cambria", 0, 14)); // NOI18N
+        jLabel3.setText("5. Silahkan baca README");
+
         javax.swing.GroupLayout jPanel_rulesLayout = new javax.swing.GroupLayout(jPanel_rules);
         jPanel_rules.setLayout(jPanel_rulesLayout);
         jPanel_rulesLayout.setHorizontalGroup(
@@ -101,7 +105,8 @@ public class gamerules extends javax.swing.JFrame {
                         .addGroup(jPanel_rulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel_rules2b)
                             .addComponent(jLabel_rules4b)
-                            .addComponent(jLabel_rules1b, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel_rules1b, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel3))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel_rulesLayout.setVerticalGroup(
@@ -123,7 +128,9 @@ public class gamerules extends javax.swing.JFrame {
                 .addComponent(jLabel_rules4a)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_rules4b)
-                .addGap(51, 51, 51))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addGap(19, 19, 19))
         );
 
         jButton_next.setFont(new java.awt.Font("Cambria", 1, 14)); // NOI18N
@@ -159,11 +166,11 @@ public class gamerules extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(86, 86, 86)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel_dictpath)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jText_dictpath, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton_dictpath))
-                            .addComponent(jLabel_dictpath))))
+                                .addComponent(jButton_dictpath)))))
                 .addContainerGap(54, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -173,7 +180,7 @@ public class gamerules extends javax.swing.JFrame {
                         .addGap(180, 180, 180))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton_next, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(260, 260, 260))))
+                        .addGap(259, 259, 259))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,16 +188,16 @@ public class gamerules extends javax.swing.JFrame {
                 .addGap(51, 51, 51)
                 .addComponent(jLabel_title)
                 .addGap(42, 42, 42)
-                .addComponent(jPanel_rules, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addComponent(jPanel_rules, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21)
                 .addComponent(jLabel_dictpath)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(7, 7, 7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jText_dictpath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton_dictpath))
-                .addGap(43, 43, 43)
+                .addGap(36, 36, 36)
                 .addComponent(jButton_next, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         pack();
@@ -296,6 +303,7 @@ public class gamerules extends javax.swing.JFrame {
     private javax.swing.JButton jButton_next;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel_dictpath;
     private javax.swing.JLabel jLabel_rules0a;
     private javax.swing.JLabel jLabel_rules1a;

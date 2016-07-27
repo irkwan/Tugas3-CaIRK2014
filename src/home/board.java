@@ -6,17 +6,13 @@ import solver.PathCreator;
 import detail.DetailIMG;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.text.SimpleDateFormat;
-
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,9 +21,11 @@ import javax.swing.table.DefaultTableModel;
  */
 public class board extends javax.swing.JFrame {
 
-    int counter = 0;
+    // timer attributes
+    int mm, ss;
+    String preMM, preSS;
+    boolean viewDone;
     static Timer timer;
-    
     
     // matrix of wordament 
     private char[][] matrix = new char[4][4];
@@ -92,7 +90,6 @@ public class board extends javax.swing.JFrame {
         jLabel_totaltitle = new javax.swing.JLabel();
         jLabel_totalvalue = new javax.swing.JLabel();
         jButton_show = new javax.swing.JButton();
-        jProgressBar_solve = new javax.swing.JProgressBar();
         jPanel_timer = new javax.swing.JPanel();
         jLabel_timer = new javax.swing.JLabel();
 
@@ -278,8 +275,6 @@ public class board extends javax.swing.JFrame {
             }
         });
 
-        jProgressBar_solve.setBackground(new java.awt.Color(0, 0, 0));
-
         jPanel_timer.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Timer", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Cambria", 1, 14))); // NOI18N
 
         jLabel_timer.setFont(new java.awt.Font("Cambria", 1, 24)); // NOI18N
@@ -324,7 +319,6 @@ public class board extends javax.swing.JFrame {
                         .addComponent(jLabel_totaltitle)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel_totalvalue, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jProgressBar_solve, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel_timer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(65, Short.MAX_VALUE))
         );
@@ -348,21 +342,31 @@ public class board extends javax.swing.JFrame {
                         .addComponent(jLabel_totalvalue)
                         .addComponent(jLabel_totaltitle)))
                 .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton_show, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jProgressBar_solve, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jButton_show, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(39, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Show the error message based on it's type
+     * @param checkType the error type
+     */
     private void showErrorMessage(String checkType) {
         if (checkType.equals("board")) {
             JOptionPane.showMessageDialog(this, "A cell can only contains one character", "Invalid input", JOptionPane.ERROR_MESSAGE);
         }
     }
     
+    /**
+    * Show the success message when all of valid words successfully
+    * found
+    */
+    public void showDoneMessage() {
+        JOptionPane.showMessageDialog(this, "Done!", "Solver status", JOptionPane.INFORMATION_MESSAGE);
+    }
+
     /**
      * Validate the board's element.
      * The board is valid if each cell has a value and the length of the value is 1,
@@ -443,45 +447,77 @@ public class board extends javax.swing.JFrame {
         if (boardValidity) {
             initMatrix();
             
+            // disable the Solve and Show button
+            jButton_solve.setEnabled(false);
+            jButton_show.setEnabled(false);
             
-            //create timer task to increment counter
+            // initialize the timer attribute
+            mm = 2;
+            ss = 0;
+            viewDone = false;
+            
+            // create timer task for decrement time
             TimerTask timerTask = new TimerTask() {
 
                 @Override
                 public void run() {
-                    counter++;
+            
+                    if (ss == 0) {
+                        ss = 59;
+                        mm--;
+                    } else {
+                        ss--;
+                    }
+                    
                 }
             };
             
-            //create thread to print counter value
+            // create thread to print the timer    
             Thread t = new Thread(new Runnable() {
 
                 @Override
                 public void run() {
                     while (true) {
                         try {
-                            /*
-                            if (counter == 3) {
-                                System.out.println("Counter has reached 3 now will terminate");
-                                timer.cancel();//end the timer
-                                break;//end this loop
+                            
+                            if ((mm == 0 && ss == 0) || (viewDone)) {
+                                // end the timer
+                                timer.cancel();
+                                
+                                // show the success message
+                                showDoneMessage();
+                                
+                                // enable the Solve and Show button
+                                jButton_solve.setEnabled(true);
+                                jButton_show.setEnabled(true);
+                                
+                                break;
                             }
-                            */
-                            jLabel_timer.setText(Integer.toString(counter));
-                            Thread.sleep(1000);
+                            
+                            if (mm < 10) {
+                                preMM = "0";
+                            } else {
+                                preMM = "";
+                            }
+                            if (ss < 10) {
+                                preSS = "0";
+                            } else {
+                                preSS = "";
+                            }
+                            
+                            jLabel_timer.setText(preMM + Integer.toString(mm) + " : " + preSS + Integer.toString(ss));
+                            Thread.sleep(550);
                         } catch (InterruptedException ex) {
                             ex.printStackTrace();
                         }
                     }
+                   
                 }
             });
 
-            
             timer = new Timer("MyTimer");
-            timer.scheduleAtFixedRate(timerTask, 1, 1000);
+            timer.scheduleAtFixedRate(timerTask, 1, 550);
             t.start();
-            
-            
             
             // create a solver's object
             ms = new MainSolver(matrix, dictLOC);
@@ -499,14 +535,9 @@ public class board extends javax.swing.JFrame {
             
                 // get the cumulated total points (final point)
                 finalPoint = ms.getFinalPoint();
-                
-                
-                //////////////////////////////////////////////////
                   
                 // show the words on table
                 new View().showResult();
-                
-                //////////////////////////////////////////////////
                 
                 // get the cell path
                 cellPath = ms.getCellPath();
@@ -585,14 +616,6 @@ public class board extends javax.swing.JFrame {
         }
         
         /**
-         * Update progress bar value
-         * @param newValue new percentage
-         */
-        public void updateBar(int newValue) {
-            jProgressBar_solve.setValue(newValue);
-        }
-        
-        /**
         * Show the found words on table, including
         * their ID, body, and point
         */
@@ -601,42 +624,41 @@ public class board extends javax.swing.JFrame {
             // KAMUS 
             Object[][] data = new Object[finalResult.size()][3];
             String[] header = {"ID", "Words", "Point"};
+            DefaultTableModel model = (DefaultTableModel) jTable_foundwords.getModel();
             
             // ALGORITMA
             
             // clear the table
             clearTable();
             
-            
-            //////////////////
-            
             Thread tt = new Thread(new Runnable() {
 
-            @Override
-            public void run() {
-            
-                // fill the data object with all of the found words
-                for (int i = 0; i < finalResult.size(); i++) {
-                    data[i][0] = i;
-                    data[i][1] = finalResult.get(i);
-                    data[i][2] = totalPoint.get(i);
-                
-                    // insert a row
-                
-                    final Object dati0 = data[i][0];
-                    final Object dati1 = data[i][1];
-                    final Object dati2 = data[i][2];
-                
-                    DefaultTableModel model = (DefaultTableModel) jTable_foundwords.getModel();
-                    model.addRow(new Object[]{dati0, dati1, dati2});
-                
-                    try {
-                        Thread.sleep(100);
-                    } catch(InterruptedException ie) {}
+                @Override
+                public void run() {
 
+                    // fill the data object with all of the found words
+                    for (int i = 0; i < finalResult.size(); i++) {
+                        data[i][0] = i;
+                        data[i][1] = finalResult.get(i);
+                        data[i][2] = totalPoint.get(i);
+
+                        // insert a row
+                        final Object dati0 = data[i][0];
+                        final Object dati1 = data[i][1];
+                        final Object dati2 = data[i][2];
+
+                        model.addRow(new Object[]{dati0, dati1, dati2});
+
+                        try {
+                            Thread.sleep(150);
+                        } catch(InterruptedException ie) {}
+
+                    }
+
+                    viewDone = true;
+                    
                 }
-        
-            }});
+            });
                 
             tt.start();
                 
@@ -718,7 +740,6 @@ public class board extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_totalvalue;
     private javax.swing.JPanel jPanel_matrix;
     private javax.swing.JPanel jPanel_timer;
-    private javax.swing.JProgressBar jProgressBar_solve;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable_foundwords;
     private javax.swing.JTextField jText_00;
