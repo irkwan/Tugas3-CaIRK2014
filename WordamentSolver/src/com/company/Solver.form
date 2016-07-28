@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="wordamentsolverView" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="53" width="655" height="513"/>
+      <xy x="20" y="53" width="968" height="573"/>
     </constraints>
     <properties/>
     <border type="none" title="Wordament Solver"/>
@@ -27,20 +27,22 @@
       <component id="8fb6b" class="javax.swing.JTable" binding="mainTable">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="2" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="200" height="200"/>
+            <preferred-size width="400" height="400"/>
           </grid>
         </constraints>
         <properties/>
       </component>
       <component id="d49fa" class="javax.swing.JLabel" binding="timerLabel">
         <constraints>
-          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-            <preferred-size width="87" height="19"/>
+          <grid row="0" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+            <minimum-size width="300" height="70"/>
+            <preferred-size width="300" height="70"/>
+            <maximum-size width="300" height="70"/>
           </grid>
         </constraints>
         <properties>
           <font size="16"/>
-          <text value="00:02:00"/>
+          <text value="Time Remaining:120 seconds"/>
         </properties>
       </component>
       <component id="b9e2" class="javax.swing.JButton" binding="solveButton" default-binding="true">
