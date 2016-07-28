@@ -740,8 +740,11 @@ public class WordamentSolver extends javax.swing.JFrame {
             
             t.start();
            
+            //Get Relative Path
+            URL url = getClass().getResource("dictionary.txt");
+
             DictReader dictionary;
-            dictionary = new DictReader("D:\\IRK\\WordamentSolver\\build\\classes\\wordamentsolver\\dictionary.txt");
+            dictionary = new DictReader(convertPath(url.getPath()));;
             
             try {
                 dictionary.processLineByLine();
@@ -779,6 +782,26 @@ public class WordamentSolver extends javax.swing.JFrame {
             Start_Btn1.setEnabled(true);
         }
     }//GEN-LAST:event_Start_BtnActionPerformed
+    
+     /**
+     * @param Path path string need to be converted
+     * @return string
+     */
+    private String convertPath (String Path) {
+        String Temp = "";
+        
+        Temp = Temp + Path.charAt(1) + ":\\";
+        for (int i=3;i<Path.length();i++) {
+            if (Path.charAt(i) == '/') {
+                Temp = Temp + "\\";
+            }
+            else {
+                Temp = Temp + Path.charAt(i);
+            }
+        }
+        
+        return Temp;
+    }
     
     private void Start_BtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start_BtnMouseEntered
         Start_Btn.setForeground(new java.awt.Color(60, 169, 163));
