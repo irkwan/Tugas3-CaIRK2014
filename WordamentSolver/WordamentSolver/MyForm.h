@@ -10,6 +10,8 @@
 #include <windows.h>
 using namespace std;
 
+vector<string> temp;
+
 namespace WordamentSolver {
 
 	using namespace System;
@@ -26,10 +28,10 @@ namespace WordamentSolver {
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 		static int second = 120;
-
-			 bool finished = false;
+		int scores = 0, word_found = 0, count = 0;
+		bool finished = false;
 	private: System::ComponentModel::BackgroundWorker^  backgroundWorker1;
-	private: Thread^ s;
+	private: System::Windows::Forms::Timer^  timer1;
 
 	public:
 		MyForm(void)
@@ -115,8 +117,9 @@ namespace WordamentSolver {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::ListViewItem^  listViewItem3 = (gcnew System::Windows::Forms::ListViewItem(L""));
-			System::Windows::Forms::ListViewItem^  listViewItem4 = (gcnew System::Windows::Forms::ListViewItem(L""));
+			this->components = (gcnew System::ComponentModel::Container());
+			System::Windows::Forms::ListViewItem^  listViewItem1 = (gcnew System::Windows::Forms::ListViewItem(L""));
+			System::Windows::Forms::ListViewItem^  listViewItem2 = (gcnew System::Windows::Forms::ListViewItem(L""));
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->textBox16 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox15 = (gcnew System::Windows::Forms::TextBox());
@@ -160,6 +163,7 @@ namespace WordamentSolver {
 			this->progressBar1 = (gcnew System::Windows::Forms::ProgressBar());
 			this->label7 = (gcnew System::Windows::Forms::Label());
 			this->backgroundWorker1 = (gcnew System::ComponentModel::BackgroundWorker());
+			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->panel1->SuspendLayout();
 			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
@@ -438,7 +442,7 @@ namespace WordamentSolver {
 			// listView1
 			// 
 			this->listView1->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(2) { this->columnHeader1, this->columnHeader2 });
-			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(2) { listViewItem3, listViewItem4 });
+			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(2) { listViewItem1, listViewItem2 });
 			this->listView1->Location = System::Drawing::Point(22, 284);
 			this->listView1->Name = L"listView1";
 			this->listView1->Size = System::Drawing::Size(502, 201);
@@ -561,6 +565,11 @@ namespace WordamentSolver {
 			this->backgroundWorker1->ProgressChanged += gcnew System::ComponentModel::ProgressChangedEventHandler(this, &MyForm::backgroundWorker1_ProgressChanged);
 			this->backgroundWorker1->RunWorkerCompleted += gcnew System::ComponentModel::RunWorkerCompletedEventHandler(this, &MyForm::backgroundWorker1_RunWorkerCompleted);
 			// 
+			// timer1
+			// 
+			this->timer1->Interval = 1000;
+			this->timer1->Tick += gcnew System::EventHandler(this, &MyForm::timer1_Tick);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -641,43 +650,14 @@ namespace WordamentSolver {
 
 	private: System::Void solve_Click(System::Object^  sender, System::EventArgs^  e) {
 		if (isBoardValid()) {
-			char** board;
-			board = new char*[4];
-			vector<string> tab_words;
-			for (int i = 0; i < 4; i++) {
-				board[i] = new char[4];
-			}
-			initMatriks(board);
-			loadDictionary(tab_words);
-			
-			// threading timer
-			this->backgroundWorker1->RunWorkerAsync();
-			progressBar1->Value = 10;
-
-			// solving process
-			int scores = 0, word_found = 0, count = 0;
-			for (string pat : tab_words) {
-				if (second == 0)
-					break;
-
-				if (isfind(board, pat)) {
-					count++;
-					if (count % 4 == 0)
-						progressBar1->Increment(1);
-					scores += pat.length();
-					word_found++;
-					String^ str3 = gcnew String(pat.c_str());
-					ListViewItem^ newitem = gcnew ListViewItem(str3);
-					newitem->SubItems->Add(System::Convert::ToString(pat.length()));
-					listView1->Items->Add(newitem);
-				}
-			}
-			progressBar1->Value = 100;		
-			finished = true;
-			MessageBox::Show("Program Finished");
-			wordsfound->Text = System::Convert::ToString(word_found);
-			score->Text = System::Convert::ToString(scores);
-			remainingtime->Text = System::Convert::ToString(second);
+			timer1->Enabled = true;
+			clearButton->Enabled = false;
+			clearToolStripMenuItem->Enabled = false;
+			exitToolStripMenuItem->Enabled = false;
+			button1->Enabled = false;
+			solve->Enabled = false;
+			solveToolStripMenuItem->Enabled = false;
+			backgroundWorker1->RunWorkerAsync();
 		}
 		else {
 			MessageBox::Show("Please fill the whole board");
@@ -742,12 +722,19 @@ namespace WordamentSolver {
 	private: System::Void clearButton_Click(System::Object^  sender, System::EventArgs^  e) {
 		wordsfound->Text = "-";
 		score->Text = "-";
-		remainingtime->Text = "-";
+		remainingtime->Text = "-";		
 		label7->Text = "Time Left : 120";
 		second = 120;
 		listView1->Items->Clear();
 		finished = false;
+		timer1->Enabled = false;
 		progressBar1->Value = 0;
+		while (!temp.empty()) {
+			temp.pop_back();
+		}
+		scores = 0;
+		word_found = 0;
+		count = 0;
 		textBox1->Clear();			textBox5->Clear();
 		textBox2->Clear();			textBox6->Clear();
 		textBox3->Clear();			textBox7->Clear();
@@ -763,35 +750,14 @@ namespace WordamentSolver {
 	// menu strip code 
 	private: System::Void solveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 		if (isBoardValid()) {
-			char** board;
-			board = new char*[4];
-			vector<string> tab_words;
-			for (int i = 0; i < 4; i++) {
-				board[i] = new char[4];
-			}
-			initMatriks(board);
-			loadDictionary(tab_words);
-			progressBar1->Value = 10;
-
-			// solving process
-			int scores = 0, word_found = 0, count = 0;
-			for (string pat : tab_words) {
-				if (isfind(board, pat)) {
-					count++;
-					if (count % 4 == 0)
-						progressBar1->Increment(1);
-					scores += pat.length();
-					word_found++;
-					String^ str3 = gcnew String(pat.c_str());
-					ListViewItem^ newitem = gcnew ListViewItem(str3);
-					newitem->SubItems->Add(System::Convert::ToString(pat.length()));
-					listView1->Items->Add(newitem);
-				}
-			}
-			progressBar1->Value = 100;
-			MessageBox::Show("Program Finished");
-			wordsfound->Text = System::Convert::ToString(word_found);
-			score->Text = System::Convert::ToString(scores);
+			timer1->Enabled = true;
+			clearButton->Enabled = false;
+			clearToolStripMenuItem->Enabled = false;
+			exitToolStripMenuItem->Enabled = false;
+			button1->Enabled = false;
+			solve->Enabled = false;
+			solveToolStripMenuItem->Enabled = false;
+			backgroundWorker1->RunWorkerAsync();
 		}
 		else {
 			MessageBox::Show("Please fill the whole board");
@@ -806,7 +772,14 @@ namespace WordamentSolver {
 		second = 120;
 		listView1->Items->Clear();
 		finished = false;
+		timer1->Enabled = false;
 		progressBar1->Value = 0;
+		while (!temp.empty()) {
+			temp.pop_back();
+		}
+		scores = 0;
+		word_found = 0;
+		count = 0;
 		textBox1->Clear();			textBox5->Clear();
 		textBox2->Clear();			textBox6->Clear();
 		textBox3->Clear();			textBox7->Clear();
@@ -831,20 +804,72 @@ namespace WordamentSolver {
 		MessageBox::Show("Wordament Solver created by Varian Caesar / 13514041\nif you find any trouble or bug please contact : variancaesar@gmail.com ^-^");
 	}
 
-	// multithreading code for timer 
+	// multithreading code for solver 
 	private: System::Void backgroundWorker1_DoWork(System::Object^  sender, System::ComponentModel::DoWorkEventArgs^  e) {
-		while (!finished && second > 0) {
-			Thread :: Sleep(1000);
-			second--;
-			this->backgroundWorker1->ReportProgress(second);
+		char** board;
+		board = new char*[4];
+		vector<string> tab_words;
+		for (int i = 0; i < 4; i++) {
+			board[i] = new char[4];
 		}
+		initMatriks(board);
+		loadDictionary(tab_words);
+		int progress = 10;
+		backgroundWorker1->ReportProgress(progress);
+		// solving process
+		for (string pat : tab_words) {
+			if (second == 0)
+				break;
+
+			if (isfind(board, pat)) {
+				count++;
+				if (count % 4 == 0) {
+					progress++;
+					backgroundWorker1->ReportProgress(progress);
+				}
+				scores += pat.length();
+				word_found++;
+				temp.push_back(pat);
+			}
+		}
+		
 	}
 
 	private: System::Void backgroundWorker1_RunWorkerCompleted(System::Object^  sender, System::ComponentModel::RunWorkerCompletedEventArgs^  e) {
-		label7->Text = "Time Left : " + System::Convert::ToString(second);
+		// show the words found
+		for (string v : temp) {
+			String^ str3 = gcnew String(v.c_str());
+			ListViewItem^ newitem = gcnew ListViewItem(str3);
+			newitem->SubItems->Add(System::Convert::ToString(v.length()));
+			listView1->Items->Add(newitem);
+		}
+
+		// statistics
+		progressBar1->Value = 100;
+		finished = true;
+		MessageBox::Show("Program Finished");
+		wordsfound->Text = System::Convert::ToString(word_found);
+		score->Text = System::Convert::ToString(scores);
+		remainingtime->Text = System::Convert::ToString(second);
+
+		// enabled all button
+		clearButton->Enabled = true;
+		clearToolStripMenuItem->Enabled = true;
+		exitToolStripMenuItem->Enabled = true;
+		button1->Enabled = true;
+		solve->Enabled = true;
+		solveToolStripMenuItem->Enabled = true;
 	}
 
 	private: System::Void backgroundWorker1_ProgressChanged(System::Object^  sender, System::ComponentModel::ProgressChangedEventArgs^  e) {
+		progressBar1->Value = e->ProgressPercentage;
+	}
+	
+	// UI Threading for timer
+	private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e) {
+		if(!finished && second > 0) {
+			second--;
+		}
 		label7->Text = "Time Left : " + System::Convert::ToString(second);
 	}
 };
