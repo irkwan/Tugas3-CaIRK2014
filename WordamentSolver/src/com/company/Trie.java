@@ -15,9 +15,6 @@ public class Trie{
 		exists = false;
 		next = new Trie[26];
 	}
-	public char getChar(){
-		return ch;
-	}
 
 	public Trie getNext(int idx){
 		return next[idx];
