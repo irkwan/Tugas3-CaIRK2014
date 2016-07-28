@@ -3,23 +3,22 @@ package res;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Collections;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Collections;
 
 public class Wordament{
 
 	private static ArrayList<String> res;
 	private static Trie t;
-
 	private static char[][] m;
 	private final static int size = 4;
 	private static boolean[][] visited;
 	private static int[] arahX;
 	private static int[] arahY;
-	
-	private static boolean valid(int x, int y){
+
+    private static boolean valid(int x, int y){
 		return x >= 0 && y >= 0 && x < size && y < size && !visited[x][y];
 	}
 
@@ -51,6 +50,7 @@ public class Wordament{
 		m = new char[size][size];
 		// still in progress
 	}
+
 	public static void InitDictionary() throws IOException{
 		BufferedReader br = new BufferedReader(new FileReader("../dictionary.txt"));
 		String sNow;
@@ -68,7 +68,8 @@ public class Wordament{
 		}
 		br.close();
 	}
-	public static ArrayList<String> Solve(char[][] _m){
+
+	public static void Solve(char[][] _m){
 		res = new ArrayList<>();
 		for(int i = 0;i < size; ++i){
 			for(int j = 0;j < size;++j){
@@ -92,6 +93,9 @@ public class Wordament{
 		res.clear();
 		res.addAll(hs);
 		Collections.sort(res);
-		return res;
 	}
+
+	public static ArrayList<String> getRes(){
+	    return res;
+    }
 }

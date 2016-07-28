@@ -1,6 +1,10 @@
 package com.company;
-import javax.swing.*;
+import javax.swing.JFrame;
 import java.io.IOException;
+
+/**
+ * Created by raditya on 7/19/16.
+ */
 
 public class Main {
 
