@@ -1,6 +1,5 @@
 #pragma once
-#using <System.dll>
-#using <System.Windows.Forms.dll>
+#include <vcclr.h>
 #include <vector>
 #include <string>
 #include <locale>
@@ -604,7 +603,7 @@ namespace WordamentSolver {
 
 		}
 #pragma endregion
-	void initMatriks(char** board) {
+	private: System::Void initMatriks(char** board) {
 		board[0][0] = tolower(System::Convert::ToChar(textBox1->Text));
 		board[0][1] = tolower(System::Convert::ToChar(textBox2->Text));
 		board[0][2] = tolower(System::Convert::ToChar(textBox3->Text));
@@ -623,7 +622,7 @@ namespace WordamentSolver {
 		board[3][3] = tolower(System::Convert::ToChar(textBox16->Text));
 	}
 
-	void loadDictionary(vector<string>& tab_words) {
+	private: System::Void loadDictionary(vector<string>& tab_words) {
 		string line;
 		ifstream myfile("dictionary.txt");
 		if (myfile.is_open())
