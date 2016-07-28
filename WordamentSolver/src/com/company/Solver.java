@@ -14,6 +14,8 @@ public class Solver {
     private JButton resetButton;
     private JButton exitButton;
     private JPanel wordamentsolverView;
+    private JTable table1;
+    private JLabel timerLabel;
 
     private class CloseListener implements ActionListener{
         @Override
