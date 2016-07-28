@@ -1,3 +1,5 @@
+package com.company;
+
 public class Trie{
 	private char ch;
 	private Trie[] next;
