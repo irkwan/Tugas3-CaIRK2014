@@ -52,7 +52,7 @@ public class Wordament{
 		// still in progress
 	}
 	public static void InitDictionary() throws IOException{
-		BufferedReader br = new BufferedReader(new FileReader("../../../../dictionary.txt"));
+		BufferedReader br = new BufferedReader(new FileReader("../dictionary.txt"));
 		String sNow;
 		while((sNow = br.readLine()) != null){
 			int len = sNow.length();
