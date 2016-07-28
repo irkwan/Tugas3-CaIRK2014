@@ -1,6 +1,8 @@
 # README
 
-Executable file (JAR) ada dalam folder **dist**.
+Demo video: https://www.youtube.com/watch?v=8pBcy3DDGuM<br />
+
+Executable file (JAR) ada dalam folder **dist**.<br />
 
 ### Teknis (tidak ada dalam spek)
 > * Spek program ditulis ulang dan bisa dilihat saat pertama kali menjalankan _solver_.
