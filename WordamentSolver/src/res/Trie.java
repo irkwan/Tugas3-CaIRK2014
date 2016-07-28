@@ -1,4 +1,4 @@
-package com.company;
+package res;
 
 public class Trie{
 	private char ch;
