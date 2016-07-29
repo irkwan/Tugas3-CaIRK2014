@@ -1,8 +1,4 @@
 # How To Use It ?
----
-
-## Before Running
-Ensure the dictionary.txt file within the same folder as WordamentSolver.jar file
 
 ---
 
