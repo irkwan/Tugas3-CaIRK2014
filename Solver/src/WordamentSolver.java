@@ -38,7 +38,7 @@ public class WordamentSolver extends javax.swing.JFrame {
     private char box[][] = new char[4][4];
     private Timer t;
     private int second = 0;
-    private int minute = 0;
+    private int minute = 2;
     private int score = 0;
     private Integer num = 0;
     private Object[] row = new Object[2];
@@ -718,14 +718,14 @@ public class WordamentSolver extends javax.swing.JFrame {
             Box_15.setEnabled(false);
             Box_16.setEnabled(false);
             
-            //Timer
+           //Timer
             t = new Timer(1000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    second++;
-                    if (second == 60) {
-                        minute++;
-                        second = 0;
+                    second--;
+                    if (second == -1) {
+                        minute--;
+                        second = 59;
                     }
                     
                     Timer_Minute.setText("0" + minute);
@@ -734,6 +734,37 @@ public class WordamentSolver extends javax.swing.JFrame {
                     }
                     else {
                         Timer_Second.setText(second + "");
+                    }
+                    
+                    if (minute == 0 && second == 0) {
+                        //Make te box able to edit
+                        Box_1.setEnabled(true);
+                        Box_2.setEnabled(true);
+                        Box_3.setEnabled(true);
+                        Box_4.setEnabled(true);
+                        Box_5.setEnabled(true);
+                        Box_6.setEnabled(true);
+                        Box_7.setEnabled(true);
+                        Box_8.setEnabled(true);
+                        Box_9.setEnabled(true);
+                        Box_10.setEnabled(true);
+                        Box_11.setEnabled(true);
+                        Box_12.setEnabled(true);
+                        Box_13.setEnabled(true);
+                        Box_14.setEnabled(true);
+                        Box_15.setEnabled(true);
+                        Box_16.setEnabled(true);
+                        Start_Btn.setEnabled(true);
+                        Start_Btn.setVisible(true);
+                        Start_Btn1.setVisible(false); 
+                        t.stop();
+                        second = 0;
+                        minute = 2;
+                        Timer_Second.setText("00");
+                        Timer_Minute.setText("00");
+                        Score.setText("0");
+                        num = 0;
+                        score = 0;
                     }
                 }
             });
@@ -1037,7 +1068,7 @@ public class WordamentSolver extends javax.swing.JFrame {
             model.setRowCount(0);
             t.stop();
             second = 0;
-            minute = 0;
+            minute = 2;
             Timer_Second.setText("00");
             Timer_Minute.setText("00");
             Score.setText("0");
