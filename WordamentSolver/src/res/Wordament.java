@@ -48,7 +48,6 @@ public class Wordament{
 		arahY = new int[]{0,-1,-1,-1,0,1,1,1};
 		t = new Trie();
 		m = new char[size][size];
-		// still in progress
 	}
 
 	public static void InitDictionary() throws IOException{

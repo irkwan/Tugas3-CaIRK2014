@@ -18,8 +18,23 @@ public class Solver {
     private JButton resetButton;
     private JButton exitButton;
     private JPanel wordamentsolverView;
-    private JTable mainTable;
     private JLabel timerLabel;
+    private JTextField cell_00;
+    private JTextField cell_01;
+    private JTextField cell_02;
+    private JTextField cell_03;
+    private JTextField cell_10;
+    private JTextField cell_11;
+    private JTextField cell_12;
+    private JTextField cell_13;
+    private JTextField cell_20;
+    private JTextField cell_21;
+    private JTextField cell_22;
+    private JTextField cell_23;
+    private JTextField cell_30;
+    private JTextField cell_31;
+    private JTextField cell_32;
+    private JTextField cell_33;
     private double remainingSeconds;
     private Timer timer;
     private final int delay = 10;
@@ -40,8 +55,6 @@ public class Solver {
         initTimer();
         displayTimer();
     }
-
-
     /** Listener **/
 
     /** TimerListener for Timer Countdown **/
@@ -95,14 +108,9 @@ public class Solver {
         exitButton.addActionListener(new CloseListener());
         solveButton.addActionListener(new SolveListener());
         resetButton.addActionListener(new ResetListener());
-
-        /**
-        mainTable = new JTable(4,4);
-        Color color = UIManager.getColor("Table.gridColor");
-        MatteBorder border = new MatteBorder(1, 1, 0, 0, color);
-        mainTable.setBorder(border);
-         **/
     }
+
+
 
     /** To make it can be called from Main Program **/
     public JPanel callView() {

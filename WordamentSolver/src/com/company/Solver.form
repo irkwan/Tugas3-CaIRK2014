@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.company.Solver">
-  <grid id="27dc6" binding="wordamentsolverView" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="wordamentsolverView" layout-manager="GridLayoutManager" row-count="6" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="53" width="968" height="573"/>
@@ -10,7 +10,7 @@
     <children>
       <component id="6c557" class="javax.swing.JButton" binding="resetButton" default-binding="true">
         <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="&amp;Reset"/>
@@ -18,25 +18,15 @@
       </component>
       <component id="13976" class="javax.swing.JButton" binding="exitButton" default-binding="true">
         <constraints>
-          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="&amp;Exit"/>
         </properties>
       </component>
-      <component id="8fb6b" class="javax.swing.JTable" binding="mainTable">
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="2" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="400" height="400"/>
-          </grid>
-        </constraints>
-        <properties>
-          <autoCreateRowSorter value="false"/>
-        </properties>
-      </component>
       <component id="d49fa" class="javax.swing.JLabel" binding="timerLabel">
         <constraints>
-          <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+          <grid row="0" column="4" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <minimum-size width="300" height="70"/>
             <preferred-size width="300" height="70"/>
             <maximum-size width="300" height="70"/>
@@ -49,11 +39,149 @@
       </component>
       <component id="b9e2" class="javax.swing.JButton" binding="solveButton" default-binding="true">
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="&amp;Solve"/>
         </properties>
+      </component>
+      <component id="aae3e" class="javax.swing.JTextField" binding="cell_00">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="4a8a4" class="javax.swing.JTextField" binding="cell_01">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="60456" class="javax.swing.JTextField" binding="cell_02">
+        <constraints>
+          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="ab2ac" class="javax.swing.JTextField" binding="cell_03">
+        <constraints>
+          <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="f7f4e" class="javax.swing.JTextField" binding="cell_10">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="57b5d" class="javax.swing.JTextField" binding="cell_11">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="22e1" class="javax.swing.JTextField" binding="cell_12">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="ac76e" class="javax.swing.JTextField" binding="cell_13">
+        <constraints>
+          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="f43" class="javax.swing.JTextField" binding="cell_20">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="ec0bf" class="javax.swing.JTextField" binding="cell_21">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="60516" class="javax.swing.JTextField" binding="cell_22">
+        <constraints>
+          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="f3a86" class="javax.swing.JTextField" binding="cell_23">
+        <constraints>
+          <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="f5b49" class="javax.swing.JTextField" binding="cell_30">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="2330b" class="javax.swing.JTextField" binding="cell_31">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="c2b38" class="javax.swing.JTextField" binding="cell_32">
+        <constraints>
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="2df93" class="javax.swing.JTextField" binding="cell_33">
+        <constraints>
+          <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="30" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
       </component>
     </children>
   </grid>
