@@ -108,7 +108,6 @@ public class Solver {
                 System.out.println(totalScore);
                 listAnswer.setModel(listModel);
                 scrollPane.createVerticalScrollBar();
-                wordamentsolverView.add(scrollPane);
             }
             catch(Exception e){
 
@@ -182,7 +181,6 @@ public class Solver {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-
         Wordament.Init();
         Wordament.InitDictionary();
         matrix = new char[4][4];
