@@ -44,6 +44,7 @@ public class Solver {
     private JLabel scoreLabel;
     private JButton clearButton;
     private JButton aboutButton;
+    private JButton howToPlayButton;
 
     private char[][] matrix;
 
@@ -64,6 +65,53 @@ public class Solver {
     private void resetTimer() {
         initTimer();
         displayTimer();
+    }
+
+    /** Constructor **/
+    public Solver() throws IOException {
+
+        /** Initialize the frame **/
+        JFrame frame = new JFrame("Solver");
+        frame.setContentPane(wordamentsolverView);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+        matrix = new char[4][4];
+        Wordament.Init();
+        Wordament.InitDictionary();
+        resetTimer();
+
+        timer = new Timer(delay, new TimerListener());
+        InitBorderBetweenCells();
+        exitButton.addActionListener(new CloseListener());
+        solveButton.addActionListener(new SolveListener());
+        resetButton.addActionListener(new ResetListener());
+        clearButton.addActionListener(new ClearListener());
+        aboutButton.addActionListener(new AboutListener());
+        howToPlayButton.addActionListener(new HowToPlayListener());
+    }
+
+    private void InitBorderBetweenCells() {
+
+        cell_00.setMargin(new Insets(0,0,0,0));
+        cell_01.setMargin(new Insets(0,0,0,0));
+        cell_02.setMargin(new Insets(0,0,0,0));
+        cell_03.setMargin(new Insets(0,0,0,0));
+
+        cell_10.setMargin(new Insets(0,0,0,0));
+        cell_11.setMargin(new Insets(0,0,0,0));
+        cell_12.setMargin(new Insets(0,0,0,0));
+        cell_13.setMargin(new Insets(0,0,0,0));
+
+        cell_20.setMargin(new Insets(0,0,0,0));
+        cell_21.setMargin(new Insets(0,0,0,0));
+        cell_22.setMargin(new Insets(0,0,0,0));
+        cell_23.setMargin(new Insets(0,0,0,0));
+
+        cell_30.setMargin(new Insets(0,0,0,0));
+        cell_31.setMargin(new Insets(0,0,0,0));
+        cell_32.setMargin(new Insets(0,0,0,0));
+        cell_33.setMargin(new Insets(0,0,0,0));
     }
 
     /** TimerListener for Timer Countdown **/
@@ -167,7 +215,8 @@ public class Solver {
                 //timer.stop();
             }
             catch(Exception e){
-                JOptionPane.showMessageDialog(wordamentsolverView, "Isilah kotak dengan huruf diantara 'a' sampai 'z', jangan ada yang kosong!", "Error", JOptionPane.ERROR_MESSAGE);
+                String message = "Make sure that you have already fill every cell with exactly 1 (one) lowercase character!";
+                JOptionPane.showMessageDialog(wordamentsolverView, message, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -218,54 +267,15 @@ public class Solver {
         }
     }
 
-    /** Constructor **/
-    public Solver() throws IOException {
-
-        /** Initialize the frame **/
-        JFrame frame = new JFrame("Solver");
-        frame.setContentPane(wordamentsolverView);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-        matrix = new char[4][4];
-        Wordament.Init();
-        Wordament.InitDictionary();
-        resetTimer();
-
-        timer = new Timer(delay, new TimerListener());
-        InitBorderBetweenCells();
-        exitButton.addActionListener(new CloseListener());
-        solveButton.addActionListener(new SolveListener());
-        resetButton.addActionListener(new ResetListener());
-        clearButton.addActionListener(new ClearListener());
-        aboutButton.addActionListener(new AboutListener());
-
+    private class HowToPlayListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            String message = "1. Fill every cell with a lowercase character ('a' to 'z')\n" +
+                    "2. Don't leave every cell with blank, or more than 1 character\n" +
+                    "3. Enjoy the game!";
+            JOptionPane.showMessageDialog(wordamentsolverView, message, "How To Play", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
-
-    private void InitBorderBetweenCells() {
-
-        cell_00.setMargin(new Insets(0,0,0,0));
-        cell_01.setMargin(new Insets(0,0,0,0));
-        cell_02.setMargin(new Insets(0,0,0,0));
-        cell_03.setMargin(new Insets(0,0,0,0));
-
-        cell_10.setMargin(new Insets(0,0,0,0));
-        cell_11.setMargin(new Insets(0,0,0,0));
-        cell_12.setMargin(new Insets(0,0,0,0));
-        cell_13.setMargin(new Insets(0,0,0,0));
-
-        cell_20.setMargin(new Insets(0,0,0,0));
-        cell_21.setMargin(new Insets(0,0,0,0));
-        cell_22.setMargin(new Insets(0,0,0,0));
-        cell_23.setMargin(new Insets(0,0,0,0));
-
-        cell_30.setMargin(new Insets(0,0,0,0));
-        cell_31.setMargin(new Insets(0,0,0,0));
-        cell_32.setMargin(new Insets(0,0,0,0));
-        cell_33.setMargin(new Insets(0,0,0,0));
-    }
-
-
 }
 
 /* Timernya belum jalan */
