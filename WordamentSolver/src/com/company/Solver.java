@@ -19,7 +19,6 @@ public class Solver {
     private JButton resetButton;
     private JButton exitButton;
 
-    private JFrame frame;
     private JPanel wordamentsolverView;
     private JLabel timerLabel;
 
@@ -40,6 +39,7 @@ public class Solver {
     private JTextField cell_32;
     private JTextField cell_33;
     private JList listAnswer;
+    private JScrollPane scrollPane;
 
     private char[][] matrix;
 
@@ -107,8 +107,8 @@ public class Solver {
                 }
                 System.out.println(totalScore);
                 listAnswer.setModel(listModel);
-
-                frame.getContentPane().add(listAnswer);
+                scrollPane.createVerticalScrollBar();
+                wordamentsolverView.add(scrollPane);
             }
             catch(Exception e){
 
@@ -177,7 +177,7 @@ public class Solver {
     public Solver() throws IOException {
 
         /** Initialize the frame **/
-        frame = new JFrame("Solver");
+        JFrame frame = new JFrame("Solver");
         frame.setContentPane(callView());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

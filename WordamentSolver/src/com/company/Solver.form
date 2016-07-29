@@ -183,19 +183,24 @@
         </constraints>
         <properties/>
       </component>
-      <component id="6cbd2" class="javax.swing.JList" binding="listAnswer">
+      <scrollpane id="96b75" binding="scrollPane">
         <constraints>
-          <grid row="1" column="5" row-span="4" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
+          <grid row="1" column="5" row-span="4" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties>
-          <model>
-            <item value="Test"/>
-            <item value="DEBUGGING"/>
-          </model>
-        </properties>
-      </component>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="6cbd2" class="javax.swing.JList" binding="listAnswer">
+            <constraints/>
+            <properties>
+              <model>
+                <item value="Test"/>
+                <item value="DEBUGGING"/>
+              </model>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
     </children>
   </grid>
 </form>
