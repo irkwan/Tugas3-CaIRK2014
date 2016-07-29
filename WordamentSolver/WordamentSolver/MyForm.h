@@ -722,8 +722,8 @@ namespace WordamentSolver {
 		wordsfound->Text = "-";
 		score->Text = "-";
 		remainingtime->Text = "-";		
-		label7->Text = "Time Left : 120";
 		second = 120;
+		label7->Text = "Time Left : " + System::Convert::ToString(second);
 		listView1->Items->Clear();
 		finished = false;
 		timer1->Enabled = false;
@@ -767,8 +767,8 @@ namespace WordamentSolver {
 		wordsfound->Text = "-";
 		score->Text = "-";
 		remainingtime->Text = "-";
-		label7->Text = "Time Left : 120";
 		second = 120;
+		label7->Text = "Time Left : " + System::Convert::ToString(second);
 		listView1->Items->Clear();
 		finished = false;
 		timer1->Enabled = false;
