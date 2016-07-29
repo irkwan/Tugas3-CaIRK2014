@@ -1,22 +1,19 @@
 package wordamentsolver;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -43,6 +40,7 @@ public class WordamentSolver extends javax.swing.JFrame {
     private Integer num = 0;
     private Object[] row = new Object[2];
     private Set<String> wordsFound = new HashSet<String>();
+    private String fileName = "";
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -72,12 +70,12 @@ public class WordamentSolver extends javax.swing.JFrame {
         Box_12 = new javax.swing.JTextField();
         Box_16 = new javax.swing.JTextField();
         Box_8 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         Start_Btn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         Start_Btn1 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         Timer_Minute = new javax.swing.JTextField();
         Timer_Second = new javax.swing.JTextField();
@@ -86,6 +84,10 @@ public class WordamentSolver extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         Score = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        Choose_Btn = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -103,11 +105,15 @@ public class WordamentSolver extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setLocation(new java.awt.Point(100, 100));
         setLocationByPlatform(true);
+        setMaximumSize(new java.awt.Dimension(420, 465));
+        setMinimumSize(new java.awt.Dimension(420, 465));
         setName("WordamentSolver"); // NOI18N
         setUndecorated(true);
-        setSize(new java.awt.Dimension(481, 375));
+        setSize(new java.awt.Dimension(520, 459));
 
         jPanel2.setBackground(new java.awt.Color(60, 169, 163));
+        jPanel2.setVisible(false);
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Box_9.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         Box_9.addActionListener(new java.awt.event.ActionListener() {
@@ -372,9 +378,7 @@ public class WordamentSolver extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jLabel2.setFont(new java.awt.Font("Calibri", 0, 17)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Enter the word below :");
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
 
         Start_Btn.setBackground(new java.awt.Color(255, 255, 255));
         Start_Btn.setFont(new java.awt.Font("Alcubierre", 0, 18)); // NOI18N
@@ -384,6 +388,7 @@ public class WordamentSolver extends javax.swing.JFrame {
         Start_Btn.setBorderPainted(false);
         Start_Btn.setContentAreaFilled(false);
         Start_Btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Start_Btn.setFocusPainted(false);
         Start_Btn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         Start_Btn.setOpaque(true);
         Start_Btn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -402,6 +407,7 @@ public class WordamentSolver extends javax.swing.JFrame {
                 Start_BtnActionPerformed(evt);
             }
         });
+        jPanel2.add(Start_Btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, 89, 36));
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
 
@@ -419,9 +425,13 @@ public class WordamentSolver extends javax.swing.JFrame {
         jTable1.setShowHorizontalLines(false);
         jScrollPane1.setViewportView(jTable1);
 
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 199, 168));
+
         jLabel6.setFont(new java.awt.Font("Calibri", 0, 17)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Result :");
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 166, -1));
+        jLabel6.getAccessibleContext().setAccessibleName("Resullt");
 
         Start_Btn1.setBackground(new java.awt.Color(255, 255, 255));
         Start_Btn1.setFont(new java.awt.Font("Alcubierre", 0, 12)); // NOI18N
@@ -429,9 +439,11 @@ public class WordamentSolver extends javax.swing.JFrame {
         Start_Btn1.setText("AGAIN?");
         Start_Btn1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Start_Btn1.setBorderPainted(false);
+        Start_Btn1.setVisible(false);
         Start_Btn1.setContentAreaFilled(false);
         Start_Btn1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Start_Btn1.setEnabled(false);
+        Start_Btn1.setFocusPainted(false);
         Start_Btn1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         Start_Btn1.setOpaque(true);
         Start_Btn1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -450,51 +462,12 @@ public class WordamentSolver extends javax.swing.JFrame {
                 Start_Btn1ActionPerformed(evt);
             }
         });
+        jPanel2.add(Start_Btn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 240, 75, 26));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(Start_Btn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(Start_Btn1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(72, 72, 72))))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Start_Btn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Start_Btn1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jLabel6.getAccessibleContext().setAccessibleName("Resullt");
+        jLabel7.setFont(new java.awt.Font("Calibri", 0, 17)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Enter the word below :");
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 166, -1));
 
         jLabel1.setFont(new java.awt.Font("Alcubierre", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 102, 102));
@@ -504,7 +477,7 @@ public class WordamentSolver extends javax.swing.JFrame {
         Timer_Minute.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         Timer_Minute.setForeground(new java.awt.Color(51, 51, 51));
         Timer_Minute.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        Timer_Minute.setText("00");
+        Timer_Minute.setText("02");
         Timer_Minute.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(60, 169, 163)));
         Timer_Minute.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -549,6 +522,69 @@ public class WordamentSolver extends javax.swing.JFrame {
         Score.setForeground(new java.awt.Color(102, 102, 102));
         Score.setText("0");
 
+        jLabel8.setFont(new java.awt.Font("Calibri", 0, 17)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel8.setText("CHOOSE");
+
+        jLabel2.setFont(new java.awt.Font("Calibri", 0, 17)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel2.setText("the dictionary file");
+
+        Choose_Btn.setBackground(new java.awt.Color(255, 255, 255));
+        Choose_Btn.setFont(new java.awt.Font("Alcubierre", 0, 14)); // NOI18N
+        Choose_Btn.setForeground(new java.awt.Color(102, 102, 102));
+        Choose_Btn.setText("choose?");
+        Choose_Btn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        Choose_Btn.setContentAreaFilled(false);
+        Choose_Btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Choose_Btn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Choose_Btn.setOpaque(true);
+        Choose_Btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                Choose_BtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                Choose_BtnMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                Choose_BtnMousePressed(evt);
+            }
+        });
+        Choose_Btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Choose_BtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel8))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(Choose_Btn, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Choose_Btn, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -557,125 +593,128 @@ public class WordamentSolver extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(345, 345, 345)
+                        .addComponent(jButton2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel4)
                         .addGap(32, 32, 32)
                         .addComponent(Score, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(155, 155, 155))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(195, 195, 195)
                         .addComponent(jLabel5)
                         .addGap(18, 18, 18)
                         .addComponent(Timer_Minute, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Timer_Second, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addComponent(jLabel3)
+                        .addGap(4, 4, 4)
+                        .addComponent(Timer_Second, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(191, 191, 191)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(Timer_Second, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel1))
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel4))
+                    .addComponent(Score)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(Timer_Minute, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
                         .addComponent(jLabel3))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel5)
-                        .addComponent(jLabel4)
-                        .addComponent(Score))
-                    .addComponent(Timer_Minute, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(Timer_Second, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void Box_11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_11ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_Box_11ActionPerformed
+          System.exit(0);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void Box_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_1ActionPerformed
+    private void Timer_MinuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Timer_MinuteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_Box_1ActionPerformed
+    }//GEN-LAST:event_Timer_MinuteActionPerformed
 
-    private void Box_6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_6ActionPerformed
+    private void Start_Btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Start_Btn1ActionPerformed
+        //Make te box able to edit
+        Box_1.setEnabled(true);
+        Box_2.setEnabled(true);
+        Box_3.setEnabled(true);
+        Box_4.setEnabled(true);
+        Box_5.setEnabled(true);
+        Box_6.setEnabled(true);
+        Box_7.setEnabled(true);
+        Box_8.setEnabled(true);
+        Box_9.setEnabled(true);
+        Box_10.setEnabled(true);
+        Box_11.setEnabled(true);
+        Box_12.setEnabled(true);
+        Box_13.setEnabled(true);
+        Box_14.setEnabled(true);
+        Box_15.setEnabled(true);
+        Box_16.setEnabled(true);
+        Start_Btn.setEnabled(true);
+        Start_Btn.setVisible(true);
+        Start_Btn1.setVisible(false);
+        DefaultTableModel model = (DefaultTableModel)this.jTable1.getModel();
+        model.setRowCount(0);
+        t.stop();
+        second = 0;
+        minute = 2;
+        Timer_Second.setText("00");
+        Timer_Minute.setText("00");
+        Score.setText("0");
+        num = 0;
+        score = 0;
+    }//GEN-LAST:event_Start_Btn1ActionPerformed
 
-    private void Box_5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_5ActionPerformed
+    private void Start_Btn1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start_Btn1MousePressed
+        
+    }//GEN-LAST:event_Start_Btn1MousePressed
 
-    private void Box_9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_9ActionPerformed
+    private void Start_Btn1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start_Btn1MouseExited
+        Start_Btn1.setForeground(new java.awt.Color(102, 102, 102));
+    }//GEN-LAST:event_Start_Btn1MouseExited
 
-    private void Box_7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_7ActionPerformed
-
-    private void Box_10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_10ActionPerformed
-
-    private void Box_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_3ActionPerformed
-
-    private void Box_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_2ActionPerformed
-
-    private void Box_13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_13ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_13ActionPerformed
-
-    private void Box_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_4ActionPerformed
-
-    private void Box_15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_15ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_15ActionPerformed
-
-    private void Box_14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_14ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_14ActionPerformed
-
-    private void Box_12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_12ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_12ActionPerformed
-
-    private void Box_16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_16ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_16ActionPerformed
-
-    private void Box_8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Box_8ActionPerformed
+    private void Start_Btn1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start_Btn1MouseEntered
+        Start_Btn1.setForeground(new java.awt.Color(60, 169, 163));
+    }//GEN-LAST:event_Start_Btn1MouseEntered
 
     private void Start_BtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Start_BtnActionPerformed
-        if ("".equals(Box_1.getText()) || "".equals(Box_2.getText()) || 
-                "".equals(Box_3.getText())  || "".equals(Box_4.getText()) ||
-                "".equals(Box_5.getText()) || "".equals(Box_6.getText()) ||
-                "".equals(Box_7.getText()) || "".equals(Box_8.getText()) || 
-                "".equals(Box_9.getText())  || "".equals(Box_10.getText()) ||
-                "".equals(Box_11.getText()) || "".equals(Box_12.getText()) ||
-                "".equals(Box_13.getText()) || "".equals(Box_14.getText()) || 
-                "".equals(Box_15.getText())  || "".equals(Box_16.getText())) {
+        if ("".equals(Box_1.getText()) || "".equals(Box_2.getText()) ||
+            "".equals(Box_3.getText())  || "".equals(Box_4.getText()) ||
+            "".equals(Box_5.getText()) || "".equals(Box_6.getText()) ||
+            "".equals(Box_7.getText()) || "".equals(Box_8.getText()) ||
+            "".equals(Box_9.getText())  || "".equals(Box_10.getText()) ||
+            "".equals(Box_11.getText()) || "".equals(Box_12.getText()) ||
+            "".equals(Box_13.getText()) || "".equals(Box_14.getText()) ||
+            "".equals(Box_15.getText())  || "".equals(Box_16.getText())) {
             final JPanel panel = new JPanel();
             JOptionPane.showMessageDialog(panel, "Fill All The Box", "Warning", JOptionPane.WARNING_MESSAGE);
         }
@@ -699,7 +738,7 @@ public class WordamentSolver extends javax.swing.JFrame {
             box[3][1] = Box_14.getText().charAt(0);
             box[3][2] = Box_15.getText().charAt(0);
             box[3][3] = Box_16.getText().charAt(0);
-            
+
             //Make te box unable to edit
             Box_1.setEnabled(false);
             Box_2.setEnabled(false);
@@ -717,8 +756,8 @@ public class WordamentSolver extends javax.swing.JFrame {
             Box_14.setEnabled(false);
             Box_15.setEnabled(false);
             Box_16.setEnabled(false);
-            
-           //Timer
+
+            //Timer
             t = new Timer(1000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -727,7 +766,7 @@ public class WordamentSolver extends javax.swing.JFrame {
                         minute--;
                         second = 59;
                     }
-                    
+
                     Timer_Minute.setText("0" + minute);
                     if (second<10) {
                         Timer_Second.setText("0" + second);
@@ -735,7 +774,7 @@ public class WordamentSolver extends javax.swing.JFrame {
                     else {
                         Timer_Second.setText(second + "");
                     }
-                    
+
                     if (minute == 0 && second == 0) {
                         //Make te box able to edit
                         Box_1.setEnabled(true);
@@ -756,7 +795,7 @@ public class WordamentSolver extends javax.swing.JFrame {
                         Box_16.setEnabled(true);
                         Start_Btn.setEnabled(true);
                         Start_Btn.setVisible(true);
-                        Start_Btn1.setVisible(false); 
+                        Start_Btn1.setVisible(false);
                         t.stop();
                         second = 0;
                         minute = 2;
@@ -768,30 +807,27 @@ public class WordamentSolver extends javax.swing.JFrame {
                     }
                 }
             });
-            
+
             t.start();
-           
-            //Get Relative Path
-            URL url = getClass().getResource("dictionary.txt");
 
             DictReader dictionary;
-            dictionary = new DictReader(convertPath(url.getPath()));;
-            
+            dictionary = new DictReader(fileName);
+
             try {
                 dictionary.processLineByLine();
             } catch (IOException ex) {
                 Logger.getLogger(WordamentSolver.class.getName()).log(Level.SEVERE, null, ex);
             }
             Tree kamus = dictionary.getTree();
-         
+
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
                     checkBox(box, new boolean[4][4], i, j, kamus, "");
                 }
             }
-            
+
             List<String> listWord = new ArrayList<String>(wordsFound);
-            
+
             listWord.stream().map((word) -> {
                 num++;
                 return word;
@@ -807,274 +843,291 @@ public class WordamentSolver extends javax.swing.JFrame {
             }).map((_item) -> (DefaultTableModel) jTable1.getModel()).forEach((model) -> {
                 model.addRow(row);
             });
-            
+
             Score.setText(score + "");
             Start_Btn1.setVisible(true);
             Start_Btn1.setEnabled(true);
         }
     }//GEN-LAST:event_Start_BtnActionPerformed
-    
-     /**
-     * @param Path path string need to be converted
-     * @return string
-     */
-    private String convertPath (String Path) {
-        String Temp = "";
-        
-        Temp = Temp + Path.charAt(1) + ":\\";
-        for (int i=3;i<Path.length();i++) {
-            if (Path.charAt(i) == '/') {
-                Temp = Temp + "\\";
-            }
-            else {
-                Temp = Temp + Path.charAt(i);
-            }
-        }
-        
-        return Temp;
-    }
-    
-    private void Start_BtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start_BtnMouseEntered
-        Start_Btn.setForeground(new java.awt.Color(60, 169, 163));
-    }//GEN-LAST:event_Start_BtnMouseEntered
 
     private void Start_BtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start_BtnMousePressed
-        
+
     }//GEN-LAST:event_Start_BtnMousePressed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-          System.exit(0);
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void Box_1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_1KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_1.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_1KeyTyped
-
-    private void Box_2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_2KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_2.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_2KeyTyped
-
-    private void Box_3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_3KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_3.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_3KeyTyped
-
-    private void Box_4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_4KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_4.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_4KeyTyped
-
-    private void Box_5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_5KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_5.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_5KeyTyped
-
-    private void Box_6KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_6KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_6.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_6KeyTyped
-
-    private void Box_7KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_7KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_7.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_7KeyTyped
-
-    private void Box_8KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_8KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_8.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_8KeyTyped
-
-    private void Box_9KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_9KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_9.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_9KeyTyped
-
-    private void Box_10KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_10KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_10.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_10KeyTyped
-
-    private void Box_11KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_11KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_11.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_11KeyTyped
-
-    private void Box_12KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_12KeyTyped
-       char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_12.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_12KeyTyped
-
-    private void Box_13KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_13KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_13.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_13KeyTyped
-
-    private void Box_14KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_14KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_14.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_14KeyTyped
-
-    private void Box_15KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_15KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_15.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_15KeyTyped
-
-    private void Box_16KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_16KeyTyped
-        char c=evt.getKeyChar();
-        if(!(Character.isAlphabetic(c)))
-            evt.consume();
-        
-        String d = Box_16.getText();
-        if (d.length() >= 1) {
-            evt.consume();
-        } 
-    }//GEN-LAST:event_Box_16KeyTyped
-
-    private void Timer_MinuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Timer_MinuteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Timer_MinuteActionPerformed
 
     private void Start_BtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start_BtnMouseExited
         Start_Btn.setForeground(new java.awt.Color(102, 102, 102));
     }//GEN-LAST:event_Start_BtnMouseExited
 
-    private void Start_Btn1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start_Btn1MouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Start_Btn1MouseEntered
+    private void Start_BtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start_BtnMouseEntered
+        Start_Btn.setForeground(new java.awt.Color(60, 169, 163));
+    }//GEN-LAST:event_Start_BtnMouseEntered
 
-    private void Start_Btn1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start_Btn1MouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Start_Btn1MouseExited
+    private void Box_8KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_8KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
 
-    private void Start_Btn1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Start_Btn1MousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Start_Btn1MousePressed
+        String d = Box_8.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_8KeyTyped
 
-    private void Start_Btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Start_Btn1ActionPerformed
-        //Make te box able to edit
-            Box_1.setEnabled(true);
-            Box_2.setEnabled(true);
-            Box_3.setEnabled(true);
-            Box_4.setEnabled(true);
-            Box_5.setEnabled(true);
-            Box_6.setEnabled(true);
-            Box_7.setEnabled(true);
-            Box_8.setEnabled(true);
-            Box_9.setEnabled(true);
-            Box_10.setEnabled(true);
-            Box_11.setEnabled(true);
-            Box_12.setEnabled(true);
-            Box_13.setEnabled(true);
-            Box_14.setEnabled(true);
-            Box_15.setEnabled(true);
-            Box_16.setEnabled(true);
-            Start_Btn.setEnabled(true);
-            Start_Btn.setVisible(true);
-            Start_Btn1.setVisible(false);
-            DefaultTableModel model = (DefaultTableModel)this.jTable1.getModel();
-            model.setRowCount(0);
-            t.stop();
-            second = 0;
-            minute = 2;
-            Timer_Second.setText("00");
-            Timer_Minute.setText("00");
-            Score.setText("0");
-            num = 0;
-            score = 0;
-    }//GEN-LAST:event_Start_Btn1ActionPerformed
+    private void Box_8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_8ActionPerformed
+
+    private void Box_16KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_16KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_16.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_16KeyTyped
+
+    private void Box_16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_16ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_16ActionPerformed
+
+    private void Box_12KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_12KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_12.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_12KeyTyped
+
+    private void Box_12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_12ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_12ActionPerformed
+
+    private void Box_14KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_14KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_14.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_14KeyTyped
+
+    private void Box_14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_14ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_14ActionPerformed
+
+    private void Box_15KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_15KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_15.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_15KeyTyped
+
+    private void Box_15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_15ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_15ActionPerformed
+
+    private void Box_4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_4KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_4.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_4KeyTyped
+
+    private void Box_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_4ActionPerformed
+
+    private void Box_13KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_13KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_13.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_13KeyTyped
+
+    private void Box_13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_13ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_13ActionPerformed
+
+    private void Box_7KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_7KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_7.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_7KeyTyped
+
+    private void Box_7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_7ActionPerformed
+
+    private void Box_1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_1KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_1.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_1KeyTyped
+
+    private void Box_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_1ActionPerformed
+
+    private void Box_5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_5KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_5.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_5KeyTyped
+
+    private void Box_5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_5ActionPerformed
+
+    private void Box_2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_2KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_2.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_2KeyTyped
+
+    private void Box_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_2ActionPerformed
+
+    private void Box_6KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_6KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_6.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_6KeyTyped
+
+    private void Box_6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_6ActionPerformed
+
+    private void Box_3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_3KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_3.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_3KeyTyped
+
+    private void Box_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_3ActionPerformed
+
+    private void Box_10KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_10KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_10.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_10KeyTyped
+
+    private void Box_10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_10ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_10ActionPerformed
+
+    private void Box_11KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_11KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_11.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_11KeyTyped
+
+    private void Box_11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_11ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_11ActionPerformed
+
+    private void Box_9KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Box_9KeyTyped
+        char c=evt.getKeyChar();
+        if(!(Character.isAlphabetic(c)))
+        evt.consume();
+
+        String d = Box_9.getText();
+        if (d.length() >= 1) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_Box_9KeyTyped
+
+    private void Box_9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Box_9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Box_9ActionPerformed
+
+    private void Choose_BtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Choose_BtnActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle("Choose your dictionary file");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+        chooser.setFileFilter(filter);
+
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            fileName = chooser.getSelectedFile().getAbsolutePath();
+        }
+
+        jPanel4.setVisible(false);
+        jPanel2.setVisible(true);
+    }//GEN-LAST:event_Choose_BtnActionPerformed
+
+    private void Choose_BtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Choose_BtnMousePressed
+        
+    }//GEN-LAST:event_Choose_BtnMousePressed
+
+    private void Choose_BtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Choose_BtnMouseExited
+        Choose_Btn.setForeground(new java.awt.Color(102, 102, 102));
+    }//GEN-LAST:event_Choose_BtnMouseExited
+
+    private void Choose_BtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Choose_BtnMouseEntered
+        Choose_Btn.setForeground(new java.awt.Color(60, 169, 163));
+    }//GEN-LAST:event_Choose_BtnMouseEntered
     
     /**
      * @param box matrix of char
@@ -1183,6 +1236,7 @@ public class WordamentSolver extends javax.swing.JFrame {
     private javax.swing.JTextField Box_7;
     private javax.swing.JTextField Box_8;
     private javax.swing.JTextField Box_9;
+    private javax.swing.JButton Choose_Btn;
     private javax.swing.JLabel Score;
     private javax.swing.JButton Start_Btn;
     private javax.swing.JButton Start_Btn1;
@@ -1195,9 +1249,12 @@ public class WordamentSolver extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
