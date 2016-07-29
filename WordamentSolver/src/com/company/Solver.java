@@ -18,6 +18,8 @@ public class Solver {
     private JButton solveButton;
     private JButton resetButton;
     private JButton exitButton;
+
+    private JFrame frame;
     private JPanel wordamentsolverView;
     private JLabel timerLabel;
 
@@ -37,6 +39,8 @@ public class Solver {
     private JTextField cell_31;
     private JTextField cell_32;
     private JTextField cell_33;
+    private JList listAnswer;
+
     private char[][] matrix;
 
     private double remainingSeconds;
@@ -59,71 +63,6 @@ public class Solver {
         initTimer();
         displayTimer();
     }
-
-    public JTextField getCell_00() {
-        return cell_00;
-    }
-
-    public JTextField getCell_01() {
-        return cell_01;
-    }
-
-    public JTextField getCell_02() {
-        return cell_02;
-    }
-
-    public JTextField getCell_03() {
-        return cell_03;
-    }
-
-    public JTextField getCell_10() {
-        return cell_10;
-    }
-
-    public JTextField getCell_11() {
-        return cell_11;
-    }
-
-    public JTextField getCell_12() {
-        return cell_12;
-    }
-
-    public JTextField getCell_13() {
-        return cell_13;
-    }
-
-    public JTextField getCell_20() {
-        return cell_20;
-    }
-
-    public JTextField getCell_21() {
-        return cell_21;
-    }
-
-    public JTextField getCell_22() {
-        return cell_22;
-    }
-
-    public JTextField getCell_23() {
-        return cell_23;
-    }
-
-    public JTextField getCell_30() {
-        return cell_30;
-    }
-
-    public JTextField getCell_31() {
-        return cell_31;
-    }
-
-    public JTextField getCell_32() {
-        return cell_32;
-    }
-
-    public JTextField getCell_33() {
-        return cell_33;
-    }
-    /** Listener **/
 
     /** TimerListener for Timer Countdown **/
     private class TimerListener implements ActionListener{
@@ -151,15 +90,25 @@ public class Solver {
         @Override
         public void actionPerformed(ActionEvent actionEvent){
             try {
+                int totalScore = 0;
                 checkField();
                 generateCells();
                 resetTimer();
                 timer.start();
+
                 Wordament.Solve(matrix);
                 ArrayList<String> res = Wordament.getRes();
+                DefaultListModel listModel = new DefaultListModel();
+
                 for (String s : res) {
+                    listModel.addElement(s);
                     System.out.println(s);
+                    totalScore += s.length();
                 }
+                System.out.println(totalScore);
+                listAnswer.setModel(listModel);
+
+                frame.getContentPane().add(listAnswer);
             }
             catch(Exception e){
 
@@ -191,7 +140,6 @@ public class Solver {
         String S = cell.getText();
         if(S.length() != 1 || (S.charAt(0) < 'a' || S.charAt(0) > 'z')) throw new Exception();
     }
-
 
     private void generateCells() {
         matrix[0][0] = cell_00.getText().charAt(0);
@@ -227,6 +175,14 @@ public class Solver {
 
     /** Constructor **/
     public Solver() throws IOException {
+
+        /** Initialize the frame **/
+        frame = new JFrame("Solver");
+        frame.setContentPane(callView());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+
         Wordament.Init();
         Wordament.InitDictionary();
         matrix = new char[4][4];
@@ -238,8 +194,6 @@ public class Solver {
         solveButton.addActionListener(new SolveListener());
         resetButton.addActionListener(new ResetListener());
     }
-
-
 
     /** To make it can be called from Main Program **/
     public JPanel callView() {
