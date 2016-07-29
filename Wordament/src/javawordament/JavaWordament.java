@@ -5,6 +5,10 @@
  */
 package javawordament;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
 import java.util.Vector;
 
 /**
@@ -16,38 +20,30 @@ public class JavaWordament {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO code application logic here
         
         Dictionary D = new Dictionary();
         boolean B = D.scanWordFile("E:\\documents\\IRK\\dict.txt");
-
-        Matrix G = new Matrix();
-        G.SetChar(new Cell(0,0), 'a');
-        G.SetChar(new Cell(0,1), 'b');
-        G.SetChar(new Cell(0,2), 'c');
-        G.SetChar(new Cell(0,3), 'd');
-
-        G.SetChar(new Cell(1,0), 'e');
-        G.SetChar(new Cell(1,1), 'f');
-        G.SetChar(new Cell(1,2), 'g');
-        G.SetChar(new Cell(1,3), 'h');
-
-        G.SetChar(new Cell(2,0), 'i');
-        G.SetChar(new Cell(2,1), 'j');
-        G.SetChar(new Cell(2,2), 'k');
-        G.SetChar(new Cell(2,3), 'l');
-
-        G.SetChar(new Cell(3,0), 'm');
-        G.SetChar(new Cell(3,1), 'n');
-        G.SetChar(new Cell(3,2), 'o');
-        G.SetChar(new Cell(3,3), 'p');
-
-        GameTree T = new GameTree(G,D);
+        Scanner in = new Scanner (new File ("E:\\documents\\IRK\\matriks.txt"));
+        
+        Matrix M = new Matrix();
+        int i,j; char n;
+        for (i=0; i<4; i++)
+            {
+                for (j=0; j<4; j++)
+                {
+                    n =  in.next().charAt(0);
+                        M.SetChar(new Cell(j,i), n);
+                    
+                }
+            }
+        
+        GameTree T = new GameTree(M,D);
         T.Begin();
         Vector<Status> temp = T.getResult();
 
-        System.out.print(G);
+        System.out.print(M);
         System.out.print(temp);
     }
     
