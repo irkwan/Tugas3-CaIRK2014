@@ -18,6 +18,8 @@ import model.Point;
 import model.WordamentMatrix;
 import controller.GameStatus;
 import controller.GameTree;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class WordamentSolverMenu extends javax.swing.JFrame {
@@ -34,7 +36,7 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
      */
     public WordamentSolverMenu() {
 	
-	boolean fine = WordList.scanWordFile("D:\\Tugas3-CaIRK2016\\dictionary.txt");
+	boolean fine = WordList.scanWordFile("dictionary.txt");
 	initComponents();
 	
 	if(!fine) {
@@ -521,7 +523,7 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
 	    if(P.x==3) s = jTile16.getText();
 	}
 	
-	if(s==null) return '\0';
+	if(s==null || s.trim().isEmpty()) return '\0';
 	else {
 	    s.trim();
 	    if(s.length()>1) return '\0';
@@ -576,6 +578,10 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
 	jTile14.setEnabled(b);
 	jTile15.setEnabled(b);
 	jTile16.setEnabled(b);
+	
+	jMenu1.setEnabled(b);
+	jMenu3.setEnabled(b);
+	jSolveButton.setEnabled(b);
     }
     
     private void ShowjResultPanel(boolean b) {
@@ -623,7 +629,7 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
 	WordList2.addElement(" ");
 	ScoreList.addElement(" ");
 	WordList2.addElement("Total "+ Result.size() +" words");
-	ScoreList.addElement("Total: "+ TotScore );
+	ScoreList.addElement(TotScore +" Points");
     }
     
     
@@ -640,27 +646,39 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
 	    jProgressBar1.setStringPainted(true);
 	    jProgressBar1.setValue(jProgressBar1.getMinimum());
 	    
-	    for(int i =0; i<= 120; i+=1){
+	    int i;
+	    int k = 0;
+	    
+	    for(i=0; i<= 120; i+=1) {
+		
 		final int progress = i;
 		SwingUtilities.invokeLater(() -> {
 		    jProgressBar1.setValue(progress);
-		    jProgressBar1.setString((120-progress) + " seconds left");
+		    jProgressBar1.setString("Time limit: " +(120-progress)+ " seconds");
 		});
 		
 		try {
-		    int k = 0;
+		    
 		    while(k<9 && !Stop[0]) {
 			Thread.sleep(100);
 			k++;
 		    }
 		    if(Stop[0]) break;
-		} catch (InterruptedException e) {}
+		
+		} catch (InterruptedException e) {
+		} finally {
+		    k = 0;
+		}
+		
 	    }
 	    
+	    final int i2 = i;
+	    final int k2 = k;
 	    SwingUtilities.invokeLater(() -> {
 		jProgressBar1.setValue(jProgressBar1.getMaximum());
-		jProgressBar1.setString("DONE");
+		jProgressBar1.setString("Time elapsed: " + i2 + "," + k2 + " seconds");
 	    });
+	    
 	    Stop[0] = true;
 	}
     }
@@ -669,9 +687,10 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
     private void jSolveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSolveButtonActionPerformed
 
 	boolean fine = tryImportBoard();
-	if(!fine) 
+	if(!fine) {
 	    JOptionPane.showMessageDialog(this, "Each board tile must contain exactly one Character", "Invalid Board Configuration", JOptionPane.WARNING_MESSAGE);
-	else {
+	    ControljBoardPanel(true);
+	} else {
 	    
 	    boolean[] Stop = new boolean[1];
 	    Stop[0] = false;
@@ -679,15 +698,18 @@ public class WordamentSolverMenu extends javax.swing.JFrame {
 	    SwingUtilities.invokeLater(new ProgressBarTask(Stop)::start);
 	    GameTree Process = new GameTree(Board, WordList);
 	    
-	    Process.Begin(Stop);
-	    Stop[0] = true;
-	    
-	    Result = Process.getResult();
-	    updateResultBoard();
-	    
+	    Thread t1 = new Thread(() -> {
+		Process.Begin(Stop);
+		Stop[0] = true;
+		
+		Result = Process.getResult();
+		updateResultBoard();
+		
+		ControljBoardPanel(true);
+		ShowjResultPanel(true);
+	    });  
+	    t1.start();
 	}
-	ControljBoardPanel(true);
-	ShowjResultPanel(true);
     }//GEN-LAST:event_jSolveButtonActionPerformed
 
     private void jRandomizeBoardMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRandomizeBoardMenuItemActionPerformed
