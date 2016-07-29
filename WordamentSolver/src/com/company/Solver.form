@@ -24,17 +24,6 @@
           <text value="&amp;Exit"/>
         </properties>
       </component>
-      <component id="d49fa" class="javax.swing.JLabel" binding="timerLabel">
-        <constraints>
-          <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
-            <maximum-size width="300" height="70"/>
-          </grid>
-        </constraints>
-        <properties>
-          <font/>
-          <text value="Time Remaining: 120000 ms"/>
-        </properties>
-      </component>
       <component id="b9e2" class="javax.swing.JButton" binding="solveButton" default-binding="true">
         <constraints>
           <grid row="6" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -242,6 +231,15 @@
         </constraints>
         <properties>
           <text value="&amp;How To Play"/>
+        </properties>
+      </component>
+      <component id="d49fa" class="javax.swing.JLabel" binding="timerLabel">
+        <constraints>
+          <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font/>
+          <text value="Time Remaining: 120000 ms"/>
         </properties>
       </component>
     </children>

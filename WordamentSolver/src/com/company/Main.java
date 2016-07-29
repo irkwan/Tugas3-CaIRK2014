@@ -1,5 +1,5 @@
 package com.company;
-import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import java.io.IOException;
 
 /**
@@ -9,6 +9,14 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-	    new Solver();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    new Solver();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

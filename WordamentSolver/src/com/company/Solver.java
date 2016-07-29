@@ -3,11 +3,13 @@ package com.company;
 import res.Wordament;
 
 import javax.swing.*;
-import java.awt.Insets;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by raditya on 7/19/16.
@@ -45,14 +47,15 @@ public class Solver {
     private JButton clearButton;
     private JButton aboutButton;
     private JButton howToPlayButton;
+    private boolean solve_done;
+    private Timer timer;
 
     private char[][] matrix;
 
     private int remainingSeconds;
-    private Timer timer;
-    private final int delay = 1;
     private final int firstMiliSeconds = 120000;
     /** Public Methods **/
+
     /** Timer **/
     private void displayTimer(){
         timerLabel.setText(String.format("Time Remaining: %d ms", remainingSeconds));
@@ -77,53 +80,16 @@ public class Solver {
         frame.pack();
         frame.setVisible(true);
         matrix = new char[4][4];
+
         Wordament.Init();
         Wordament.InitDictionary();
         resetTimer();
-
-        timer = new Timer(delay, new TimerListener());
-        InitBorderBetweenCells();
         exitButton.addActionListener(new CloseListener());
         solveButton.addActionListener(new SolveListener());
         resetButton.addActionListener(new ResetListener());
         clearButton.addActionListener(new ClearListener());
         aboutButton.addActionListener(new AboutListener());
         howToPlayButton.addActionListener(new HowToPlayListener());
-    }
-
-    private void InitBorderBetweenCells() {
-
-        cell_00.setMargin(new Insets(0,0,0,0));
-        cell_01.setMargin(new Insets(0,0,0,0));
-        cell_02.setMargin(new Insets(0,0,0,0));
-        cell_03.setMargin(new Insets(0,0,0,0));
-
-        cell_10.setMargin(new Insets(0,0,0,0));
-        cell_11.setMargin(new Insets(0,0,0,0));
-        cell_12.setMargin(new Insets(0,0,0,0));
-        cell_13.setMargin(new Insets(0,0,0,0));
-
-        cell_20.setMargin(new Insets(0,0,0,0));
-        cell_21.setMargin(new Insets(0,0,0,0));
-        cell_22.setMargin(new Insets(0,0,0,0));
-        cell_23.setMargin(new Insets(0,0,0,0));
-
-        cell_30.setMargin(new Insets(0,0,0,0));
-        cell_31.setMargin(new Insets(0,0,0,0));
-        cell_32.setMargin(new Insets(0,0,0,0));
-        cell_33.setMargin(new Insets(0,0,0,0));
-    }
-
-    /** TimerListener for Timer Countdown **/
-    private class TimerListener implements ActionListener{
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            remainingSeconds -= delay;
-            if(remainingSeconds <= 0){
-                timer.stop();
-            }
-            displayTimer();
-        }
     }
 
     /** CloseListener for Exit Button **/
@@ -136,27 +102,6 @@ public class Solver {
 
     /** SolveListener for Solve Button **/
     private class SolveListener implements ActionListener{
-
-        private void Process() throws IOException {
-
-            int totalScore = 0;
-            long start = System.nanoTime();
-            Wordament.Solve(matrix);
-            long end = System.nanoTime();
-            ArrayList<String> res = Wordament.getRes();
-            DefaultListModel listModel = new DefaultListModel();
-
-            for (String s : res) {
-                listModel.addElement(s);
-                System.out.println(s);
-                totalScore += s.length();
-            }
-            System.out.println(totalScore);
-            System.out.println((end - start) + " ns");
-            listAnswer.setModel(listModel);
-            scrollPane.createVerticalScrollBar();
-            scoreLabel.setText(String.format("Score: %d", totalScore));
-        }
 
         private void checkField() throws Exception {
             check(cell_00);
@@ -207,14 +152,44 @@ public class Solver {
         @Override
         public void actionPerformed(ActionEvent actionEvent){
             try {
+                solve_done = false;
                 checkField();
                 generateCells();
                 resetTimer();
-                timer.start();
-                Process();
-                //timer.stop();
+
+                //Process();
+                int totalScore = 0;
+                timer = new Timer("solveTimer");
+                timer.scheduleAtFixedRate(new TimerTask(){
+                    @Override
+                    public void run() {
+                        if(remainingSeconds != 0 && !solve_done){
+                            remainingSeconds--;
+                        }
+                        else {
+                            timer.cancel();
+                        }
+                        displayTimer();
+                    }
+                }, 0, 1);
+
+                Wordament.Solve(matrix);
+
+                ArrayList<String> res = Wordament.getRes();
+                DefaultListModel listModel = new DefaultListModel();
+
+                for (String s : res) {
+                    listModel.addElement(s);
+                    totalScore += s.length();
+                }
+                listAnswer.setModel(listModel);
+                scrollPane.createVerticalScrollBar();
+                solve_done = true;
+
+                scoreLabel.setText(String.format("Score: %d", totalScore));
             }
             catch(Exception e){
+                System.out.println(e.getMessage());
                 String message = "Make sure that you have already fill every cell with exactly 1 (one) lowercase character!";
                 JOptionPane.showMessageDialog(wordamentsolverView, message, "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -228,7 +203,7 @@ public class Solver {
 
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            timer.stop();
+            //timer.stop();
             resetTimer();
         }
     }
@@ -272,10 +247,17 @@ public class Solver {
         public void actionPerformed(ActionEvent actionEvent) {
             String message = "1. Fill every cell with a lowercase character ('a' to 'z')\n" +
                     "2. Don't leave every cell with blank, or more than 1 character\n" +
-                    "3. Enjoy the game!";
+                    "3. Click Solve to generate the answer\n\n\n" +
+                    "\n" +
+                    "\n" +
+                    "Additional:\n" +
+                    "Click Reset to reset the time\n" +
+                    "Click About to see the credits\n" +
+                    "Click Clear to clear the cells\n\n\n" +
+                    "Enjoy the game!";
             JOptionPane.showMessageDialog(wordamentsolverView, message, "How To Play", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }
 
-/* Timernya belum jalan */
+/* Timernya belum 100% jalan dengan displayTimer() */
