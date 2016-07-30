@@ -5,6 +5,8 @@ Program ini adalah program untuk menampilkan semua kemungkinan jawaban kata-kata
 
 Sebelum menjalankannya, download semua file yang ada di folder _bin_
 
+Untuk saat ini belum menggunakan UI
+
 ###Let's Start
 1. Buka file **matriks.txt** 
 2. Ubah semua menjadi karakter yang ada di permainan
