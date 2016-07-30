@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-
 /**
  * Created by raditya on 7/19/16.
  */
@@ -57,7 +56,7 @@ public class Solver {
     /** Public Methods **/
 
     /** Timer **/
-    private void displayTimer(){
+    public void displayTimer() {
         timerLabel.setText(String.format("Time Remaining: %d ms", remainingSeconds));
     }
 
@@ -81,9 +80,14 @@ public class Solver {
         frame.setVisible(true);
         matrix = new char[4][4];
 
-        Wordament.Init();
-        Wordament.InitDictionary();
         resetTimer();
+        Wordament.Init();
+        try {
+            Wordament.InitDictionary();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         exitButton.addActionListener(new CloseListener());
         solveButton.addActionListener(new SolveListener());
         resetButton.addActionListener(new ResetListener());
@@ -157,9 +161,7 @@ public class Solver {
                 generateCells();
                 resetTimer();
 
-                //Process();
-                int totalScore = 0;
-                timer = new Timer("solveTimer");
+                timer = new Timer("timerSolve");
                 timer.scheduleAtFixedRate(new TimerTask(){
                     @Override
                     public void run() {
@@ -173,20 +175,29 @@ public class Solver {
                     }
                 }, 0, 1);
 
-                Wordament.Solve(matrix);
 
-                ArrayList<String> res = Wordament.getRes();
-                DefaultListModel listModel = new DefaultListModel();
+                Thread t1 = new Thread("Solve"){
 
-                for (String s : res) {
-                    listModel.addElement(s);
-                    totalScore += s.length();
-                }
-                listAnswer.setModel(listModel);
-                scrollPane.createVerticalScrollBar();
-                solve_done = true;
+                    @Override
+                    public void run() {
+                        Wordament.Solve(matrix);
+                        ArrayList<String> res = Wordament.getRes();
+                        DefaultListModel listModel = new DefaultListModel();
+                        int totalScore = 0;
+                        for (String s : res) {
+                            listModel.addElement(s);
+                            totalScore += s.length();
+                        }
+                        listAnswer.setModel(listModel);
+                        scrollPane.createVerticalScrollBar();
+                        solve_done = true;
 
-                scoreLabel.setText(String.format("Score: %d", totalScore));
+                        scoreLabel.setText(String.format("Score: %d", totalScore));
+                        String message = String.format("Wordament answer generated in %d ms!", firstMiliSeconds - remainingSeconds);
+                        JOptionPane.showMessageDialog(wordamentsolverView, message, "Done", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                };
+                t1.start();
             }
             catch(Exception e){
                 System.out.println(e.getMessage());
