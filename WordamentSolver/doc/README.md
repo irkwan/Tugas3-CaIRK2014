@@ -9,6 +9,7 @@
 * Program yang dibuat merupakan *desktop application*.
 * Untuk membuat program ini, diperlukan 3 thread (main program, timer, dan saat solving).
 * Timer yang digunakan adalah java.util.Timer (bukan javax.swing.Timer).
+* Karakter yang digunakan adalah karakter alfabet huruf kecil ('a' - 'z', karakter ASCII 97 sampai 122).
 
 ### Struktur Data
 Struktur data yang dipakai untuk menyelesaikan program ini adalah [__Trie__](https://en.wikipedia.org/wiki/Trie).
