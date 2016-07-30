@@ -8,8 +8,6 @@ Sebelum menjalankannya, download semua file yang ada di folder _bin_
 Untuk saat ini belum menggunakan UI
 
 ###Let's Start
-1. Buka file **matriks.txt** 
-2. Ubah semua menjadi karakter yang ada di permainan
-3. Save file tersebut
-4. Jalankan file **JavaWordament.jar**
-5. Daftar kata-kata akan keluar beserta path untuk membentuk kata tersebut
+1. Masukkan  karakter yang ada di permainan
+2. Klik **solve**
+3. Daftar kata-kata akan keluar beserta path untuk membentuk kata tersebut
