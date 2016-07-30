@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import java.util.Timer;
 import java.util.TimerTask;
 /**
@@ -153,12 +154,38 @@ public class Solver {
             matrix[3][3] = cell_33.getText().charAt(0);
         }
 
+        private void Process(){
+            /* Thread for process */
+            Thread t1 = new Thread("Solve"){
+
+                @Override
+                public void run() {
+                    generateCells();
+                    Wordament.Solve(matrix);
+                    ArrayList<String> res = Wordament.getRes();
+                    DefaultListModel listModel = new DefaultListModel();
+                    int totalScore = 0;
+                    for (String s : res) {
+                        listModel.addElement(s);
+                        totalScore += s.length();
+                    }
+                    listAnswer.setModel(listModel);
+                    scrollPane.createVerticalScrollBar();
+                    solve_done = true;
+
+                    scoreLabel.setText(String.format("Score: %d", totalScore));
+                    String message = String.format("Wordament answer generated in %d ms!", firstMiliSeconds - remainingSeconds);
+                    JOptionPane.showMessageDialog(wordamentsolverView, message, "Done", JOptionPane.INFORMATION_MESSAGE);
+                }
+            };
+            t1.start();
+        }
+
         @Override
         public void actionPerformed(ActionEvent actionEvent){
             try {
                 solve_done = false;
                 checkField();
-                generateCells();
                 resetTimer();
 
                 timer = new Timer("timerSolve");
@@ -175,29 +202,8 @@ public class Solver {
                     }
                 }, 0, 1);
 
+                Process();
 
-                Thread t1 = new Thread("Solve"){
-
-                    @Override
-                    public void run() {
-                        Wordament.Solve(matrix);
-                        ArrayList<String> res = Wordament.getRes();
-                        DefaultListModel listModel = new DefaultListModel();
-                        int totalScore = 0;
-                        for (String s : res) {
-                            listModel.addElement(s);
-                            totalScore += s.length();
-                        }
-                        listAnswer.setModel(listModel);
-                        scrollPane.createVerticalScrollBar();
-                        solve_done = true;
-
-                        scoreLabel.setText(String.format("Score: %d", totalScore));
-                        String message = String.format("Wordament answer generated in %d ms!", firstMiliSeconds - remainingSeconds);
-                        JOptionPane.showMessageDialog(wordamentsolverView, message, "Done", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                };
-                t1.start();
             }
             catch(Exception e){
                 System.out.println(e.getMessage());
