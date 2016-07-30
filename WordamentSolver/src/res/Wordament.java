@@ -1,10 +1,11 @@
 package res;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Collections;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -51,9 +52,10 @@ public class Wordament{
 	}
 
 	public static void InitDictionary() throws IOException{
-		BufferedReader br = new BufferedReader(new FileReader("../dictionary.txt"));
-		String sNow;
-		while((sNow = br.readLine()) != null){
+	    InputStream in = Wordament.class.getResourceAsStream("/res/dictionary.txt");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        String sNow = "";
+		while((sNow = reader.readLine()) != null){
 			int len = sNow.length();
 			Trie tNow = t;
 			for(int i = 0;i < len; ++i){
@@ -65,7 +67,7 @@ public class Wordament{
 			}	
 			tNow.setExist();
 		}
-		br.close();
+		in.close();
 	}
 
 	public static void Solve(char[][] _m){
