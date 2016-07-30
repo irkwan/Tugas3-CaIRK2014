@@ -18,6 +18,6 @@ Jul 30, 2016
 
 ### License
 
-Alfonsus Raditya Arsadjaja\
+Alfonsus Raditya Arsadjaja  
 13514088
 
