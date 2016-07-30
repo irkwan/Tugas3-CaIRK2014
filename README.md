@@ -5,3 +5,6 @@ Wordament Helper dibuat dengan tools Visual Studio 2013 menggunakan bahasa pemro
 1. Buka WordamentHelper.exe
 2. Masukan huruf ke tabel 4x4 wordament atau pilih random.
 3. Pilih search word untuk mulai.
+
+##Bug 
+- Proses pencarian kata membuat GUI freeze sehingga timer tidak terlihat sebagai thread sendiri.
