@@ -206,8 +206,7 @@ public class Solver {
 
             }
             catch(Exception e){
-                System.out.println(e.getMessage());
-                String message = "Make sure that you have already fill every cell with exactly 1 (one) lowercase character!";
+                String message = "Make sure that you have already fill every cell with exactly 1 (one) lowercase character ('a' - 'z')!";
                 JOptionPane.showMessageDialog(wordamentsolverView, message, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
