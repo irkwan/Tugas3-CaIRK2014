@@ -5,14 +5,18 @@
             <url>src/viewer/WordamentSolverMenu.java</url>
             <bookmark id="1">
                 <name/>
-                <line>595</line>
+                <line>599</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/Tugas3-CaIRK2016/WordamentSolver/src/model/WordamentMatrix.java</file>
             <file>file:/D:/Tugas3-CaIRK2016/WordamentSolver/src/viewer/WordamentSolverMenu.java</file>
+            <file>file:/D:/Tugas3-CaIRK2016/WordamentSolver/src/model/Dictionary.java</file>
+            <file>file:/D:/Tugas3-CaIRK2016/WordamentSolver/src/model/Point.java</file>
+            <file>file:/D:/Tugas3-CaIRK2016/WordamentSolver/src/controller/GameTree.java</file>
         </group>
     </open-files>
 </project-private>

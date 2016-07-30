@@ -18,8 +18,6 @@ import model.Point;
 import model.WordamentMatrix;
 import controller.GameStatus;
 import controller.GameTree;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class WordamentSolverMenu extends javax.swing.JFrame {
