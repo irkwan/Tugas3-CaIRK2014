@@ -15,6 +15,7 @@ namespace WordamentHelper
         private int[] indexDictionary;
         public List<string> foundWords;
         private int point;
+        private int maxIndex;
 
         //Inisialisasi puzzle dan kamus
         public Puzzle()
@@ -31,11 +32,21 @@ namespace WordamentHelper
                 //Pengindeks-an abjad agar pencarian lebih cepat
                 if (dictionary[k].ElementAt(0) != cap)
                 {
-                    cap = dictionary[k].ElementAt(0);
-                    indexDictionary[((int)cap - 97)] = k;
+                    if (dictionary[k].ElementAt(0) > cap)
+                    {
+                        cap = dictionary[k].ElementAt(0);
+                        indexDictionary[((int)cap - 97)] = k;
+                    }
+                    else if (cap == 'z')
+                    {
+                        cap++;
+                        indexDictionary[((int)cap - 97)] = k;
+                        
+                    }
                 }
                 k++;
             }
+            maxIndex = k;
             point = 0;
             table = new char[4, 4];
         }
@@ -140,7 +151,18 @@ namespace WordamentHelper
                     found = true;
                 }
                 i++;
+
             }
+            i = indexDictionary[26];
+            while (!found && i < maxIndex)
+            {
+                if (dictionary[i].Equals(S))
+                {
+                    found = true;
+                }
+                i++;
+            }
+            
             return found;
         }
 
@@ -150,7 +172,17 @@ namespace WordamentHelper
             bool found = false;
             int x = (int)S.ElementAt(0) - 97;
             int i = indexDictionary[x];
-            while (!found && i < indexDictionary[x + 1])
+            while (!found && i < indexDictionary[x+1])
+            {
+                if (dictionary[i].StartsWith(S))
+                {
+                    found = true;
+                }
+                i++;
+            }
+            
+            i = indexDictionary[26];
+            while (!found && i < maxIndex)
             {
                 if (dictionary[i].StartsWith(S))
                 {

@@ -11,17 +11,52 @@ using System.Diagnostics;
 
 namespace WordamentHelper
 {
+    using System.Threading;
     public partial class Form1 : Form
     {
         public Form1()
         {
+            invokeCount = 1200;
             InitializeComponent();
+            var th1 = new Thread(TimerTick);
+            th1.Start();
         }
 
+        public void TimerTick(Object stateInfo)
+        {
+            while (true)
+            {
+                System.Threading.Thread.Sleep(95);
+                string text = (invokeCount / 10).ToString() + "." + (invokeCount % 10).ToString();
+                SetText(text);
+            }
+        }
+        delegate void SetTextCallback(string text);
+        private void SetText(string text)
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (this.textBox17.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(SetText);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                this.textBox17.Text = text;
+            }
+        }
         private void button1_Click(object sender, EventArgs e)
         {
-            Stopwatch sw = Stopwatch.StartNew();
-            
+            invokeCount = 1200;
+            // Create timer
+            // Have the timer fire repeated events (true is the default)
+            aTimer.AutoReset = true;
+            // Start the timer
+            aTimer.Enabled = true;
+            //Get table
+
             char[] input = new char[16];
             input[0] = Char.ToLower(textBox1.Text.ElementAt(0));
             input[1] = Char.ToLower(textBox2.Text.ElementAt(0));
@@ -43,7 +78,6 @@ namespace WordamentHelper
             myPuzzle.solve(input);
             listView1.BeginUpdate();
             listView1.Items.Clear();
-            label4.Text = "";
             label5.Text = "";
             label6.Text = "";
             int k = 0;
@@ -53,18 +87,20 @@ namespace WordamentHelper
                 listView1.Items[i].SubItems.Add(myPuzzle.foundWords[i]);
                 k += myPuzzle.foundWords[i].Length;
             }
-            sw.Stop();
-            label4.Text = sw.Elapsed.TotalMilliseconds.ToString() + " ms";
+
             label5.Text = myPuzzle.foundWords.Count.ToString();
             label6.Text = k.ToString();
             listView1.EndUpdate();
+            //stop timer
+            aTimer.AutoReset = false;
+            aTimer.Enabled = false;
         }
-
         private void button2_Click(object sender, EventArgs e)
         {
+            invokeCount = 1200;
+            textBox17.Text = "120.0";
             Random rnd = new Random();
             listView1.Items.Clear();
-            label4.Text = "";
             label5.Text = "";
             label6.Text = "";
             int randomChar = rnd.Next(26);
